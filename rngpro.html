@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="An RNGdle EP calculator. Find out how much EP a number might earn. 100% ACCURATE ON RNGDLE V2!!! 🎉">
+    <meta property="og:description" content="An RNGdle EP calculator. Find out how much EP a number might earn. 100% ACCURATE ON RNGDLE V2!!! 🎉">
+    <meta name="author" content="ProtoType Studios">
+    <meta property="og:title" content="RNGdle Sandbox by ProtoType Studios™">
+    <meta property="og:url" content="https://prototypestudios.neocities.org/rngdle">
+    <meta name="theme-color" content="#0a0a0a">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RNGpro</title>
+    <link rel="stylesheet" href="https://prototypestudios.neocities.org/style.css">
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+      @keyframes breathe {
+        0%, 100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.015);
+        }
+      }
+      @keyframes spin {
+        0% {transform: scale(0) rotate(0deg); top: 0%; opacity: 0.5;}
+        40%, 60% {transform: scale(2) rotate(720deg); top: 0%; opacity: 1;}
+        100% {transform: scale(2) rotate(720deg); top: 100%; opacity: 0;}
+      }
+      @keyframes spin2 {
+        0% {transform: scale(0); top: 0%; opacity: 0.5;}
+        40%, 60% {transform: scale(2); top: 0%; opacity: 1;}
+        100% {transform: scale(2); top: 100%; opacity: 0;}
+      }
+      .spin {
+        display: flex;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        z-index: 86;
+        justify-content: center;
+        align-items: center;
+        animation: 4s spin forwards;
+      }
+      .spin2 {
+        display: flex;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        z-index: 86;
+        justify-content: center;
+        align-items: center;
+        animation: 4s spin2 forwards;
+      }
+      body {
+        background-color: #131313;
+        font-family: "Space Mono", monospace;
+        color: #fafafa;
+      }
+      h1 {
+        font-size: 3.75rem;
+        margin: 1rem;
+      }
+      #luck {
+        border-radius: 0.875rem;
+        border: 3px solid oklch(44.2% 0.017 285.786);
+        background: linear-gradient(135deg, #fff3 0%, #ffffff09 33%, transparent 60%, #ffffff07 100%), linear-gradient(to bottom right in oklab, color-mix(in oklab, oklch(37% 0.013 285.805) 50%,transparent) 0%, oklch(27.4% 0.006 286.033) 50%, color-mix(in oklab, oklch(37% 0.013 285.805) 50%,transparent) 100%);
+        box-sizing: border-box;
+        box-shadow: 0 10px 15px -3px color-mix(in oklab,color-mix(in oklab, oklch(27.4% 0.006 286.033) 50%,transparent) 100%,transparent),0 4px 6px -4px color-mix(in oklab,color-mix(in oklab, oklch(27.4% 0.006 286.033) 50%,transparent) 100%,transparent);
+        padding-inline: 0.75rem;
+        padding-block: 0.25rem;
+        color: oklch(87.2% 0.01 258.338);
+        text-shadow: 0 1px 2px #fff3;
+        font-size: 1.5rem;
+        text-align: center;
+        font-family: "Space Mono", monospace;
+        font-weight: 500;
+      }
+      #num {
+        border-radius: 0.875rem;
+        border: 3px solid oklch(44.2% 0.017 285.786);
+        background: linear-gradient(135deg, #fff3 0%, #ffffff09 33%, transparent 60%, #ffffff07 100%), linear-gradient(to bottom right in oklab, color-mix(in oklab, oklch(37% 0.013 285.805) 50%,transparent) 0%, oklch(27.4% 0.006 286.033) 50%, color-mix(in oklab, oklch(37% 0.013 285.805) 50%,transparent) 100%);
+        box-sizing: border-box;
+        box-shadow: 0 10px 15px -3px color-mix(in oklab,color-mix(in oklab, oklch(27.4% 0.006 286.033) 50%,transparent) 100%,transparent),0 4px 6px -4px color-mix(in oklab,color-mix(in oklab, oklch(27.4% 0.006 286.033) 50%,transparent) 100%,transparent);
+        padding-inline: 1.75rem;
+        padding-block: 1rem;
+        width: 16.25rem;
+        color: oklch(87.2% 0.01 258.338);
+        text-shadow: 0 1px 2px #fff3;
+        font-size: 2.75rem;
+        text-align: center;
+        font-family: "Space Mono", monospace;
+        font-weight: 700;
+        transition: all 0.75s ease;
+        animation: 3s ease-in-out infinite breathe;
+        scale: 0.8;
+        margin-bottom: 1rem;
+      }
+      #ep {
+        background-color: oklch(27.4% 0.006 286.033);
+        border: 1px solid oklch(44.2% 0.017 285.786);
+        color: oklch(87.2% 0.01 258.338);
+        border-radius: 999rem;
+        font-size: 1rem;
+        width: fit-content;
+        padding-inline: 0.75rem;
+        padding-block: 0.25rem;
+        transition: all 0.75s ease;
+        margin-bottom: 0.4rem;
+      }
+      #ep2 {
+        color: #c4c4c4;
+        font-size: 1rem;
+      }
+      #ep3, #badges, #number {
+        color: #9a9a9a;
+        margin-top: 0;
+        font-size: 0.75rem;
+        font-family: "Inter", sans-serif;
+        font-weight: normal;
+      }
+      #ep3 {
+        margin-bottom: 0.25rem;
+      }
+      #badges {
+        padding-inline: 20vw;
+      }
+      #rarity {
+        background-color: oklch(27.4% 0.006 286.033);
+        font-family: "Inter", sans-serif;
+        color: oklch(87.2% 0.01 258.338);
+        font-size: 0.75rem;
+        border-radius: 0.25rem;
+        border: 1px solid oklch(44.2% 0.017 285.786);
+        width: fit-content;
+        margin-right: 0.25rem;
+        padding-inline: 0.5rem;
+        padding-block: 0.125rem;
+        transition: all 0.75s ease;
+      }
+      #percentile {
+        font-family: "Inter", sans-serif;
+        color: oklch(63.7% 0.237 25.331);
+        font-weight: normal;
+        margin-left: 0.25em;
+        font-size: 0.875rem;
+        transition: all 0.75s ease;
+      }
+      h6 {
+        margin: 0;
+      }
+      button {
+        display: inline-flex;
+        border: 1px solid;
+        background-color: oklch(26.1% 0.014 295);
+        color: #c4c4c4;
+        border-radius: 0.5rem;
+        padding-inline: 0.75rem;
+        padding-block: 0.475rem;
+        margin-inline: 0;
+        width: fit-content;
+        font-family: "Inter", sans-serif;
+        font-weight: bold;
+        font-size: 0.875rem;
+        animation: border 3s infinite;
+      }
+      #countdown {
+        font-size: 0.875rem;
+        font-family: "Space Mono", monospace;
+        margin-left: 0.125rem;
+        color: #c4c4c4;
+      }
+      svg {
+        width: 0.875rem;
+        height: 0.875rem;
+        margin-right: 0.375rem;
+      }
+      @keyframes border {
+        0%, 100% {
+          border-color: #d1d5db;
+          box-shadow: 0 0 #0000;
+        }
+        50% {
+          border-color: #6b7280;
+          box-shadow: 0 0 8px 2px #00000026;
+        }
+      }
+      
+      @keyframes appear {
+        0% {transform: translateY(10px); opacity: 0;}
+        100% {transform: translateY(0px); opacity: 1;}
+      }
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      input[type=number] {
+        -moz-appearance: textfield;
+        appearance: textfield;
+      }
+      #num.trash {
+        background: linear-gradient(135deg, #ffffff09 0%, #ffffff09 33%, transparent 60%, #ffffff07 100%),
+          linear-gradient(to bottom right in oklab, #7b330699 0%, #ffffff1a 50%, #7b330699 100%);
+        border: 3px solid oklch(47.3% 0.137 46.201);
+        color: oklch(87.9% 0.169 91.605);
+      }
+      #num.uncommon {
+        background: linear-gradient(135deg, #ffffff09 0%, #ffffff09 33%, transparent 60%, #ffffff07 100%),
+          linear-gradient(to bottom right in oklab, color-mix(in oklab, oklch(37.8% 0.077 168.94) 60%,transparent) 0%, oklch(27.4% 0.006 286.033) 50%, color-mix(in oklab, oklch(37.8% 0.077 168.94) 60%,transparent) 100%);
+        border: 3px solid oklch(43.2% 0.095 166.913);
+        color: oklch(76.5% 0.177 163.223);
+      }
+      #num.rare {
+        background: linear-gradient(135deg, #ffffff09 0%, #ffffff09 33%, transparent 60%, #ffffff07 100%),
+          linear-gradient(to bottom right in oklab, color-mix(in oklab, oklch(37.9% 0.146 265.522) 60%,transparent) 0%, oklch(27.4% 0.006 286.033) 50%, color-mix(in oklab, oklch(37.9% 0.146 265.522) 60%,transparent) 100%);
+        border: 3px solid oklch(42.4% 0.199 265.638);
+        color: oklch(70.7% 0.165 254.624);
+      }
+      #num.epic {
+        background: linear-gradient(135deg, #ffffff09 0%, #ffffff09 33%, transparent 60%, #ffffff07 100%),
+          linear-gradient(to bottom right in oklab, color-mix(in oklab, oklch(38.1% 0.176 304.987) 60%,transparent) 0%, oklch(27.4% 0.006 286.033) 50%, color-mix(in oklab, oklch(38.1% 0.176 304.987) 60%,transparent) 100%);
+        border: 3px solid oklch(43.8% 0.218 303.724);
+        color: oklch(71.4% 0.203 305.504);
+      }
+      #num.anomaly {
+        background: linear-gradient(135deg, #ffffff09 0%, #ffffff09 33%, transparent 60%, #ffffff07 100%),
+          linear-gradient(to bottom right in oklab, color-mix(in oklab, oklch(40.8% 0.123 38.172) 60%,transparent) 0%, oklch(27.4% 0.006 286.033) 50%, color-mix(in oklab, oklch(40.8% 0.123 38.172) 60%,transparent) 100%), linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 40%, transparent 100%);
+        border: 3px solid oklch(47% 0.157 37.304);
+        color: oklch(75% 0.183 55.934);
+        box-shadow: 0 0 18px color-mix(in oklab,color-mix(in oklab, oklch(40.8% 0.123 38.172) 30%,transparent) 100%,transparent);
+      }
+      #num.mythic {
+        background: linear-gradient(135deg, transparent 0%, #ffffff07 33%, transparent 60%, #ffffff07 100%),
+          linear-gradient(to bottom right in oklab, color-mix(in oklab, oklch(41% 0.159 10.272) 55%,transparent) 0%, color-mix(in oklab, oklch(38.1% 0.176 304.987) 45%,transparent) 50%, color-mix(in oklab, oklch(39.8% 0.07 227.392) 55%,transparent) 100%), linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 40%, transparent 100%);
+        border: 3px solid oklch(45.9% 0.187 3.815);
+        color: oklch(96.7% 0.003 264.542);
+        box-shadow: 0 0 24px color-mix(in oklab,color-mix(in oklab, oklch(40.8% 0.153 2.432) 30%,transparent) 100%,transparent),0 0 42px color-mix(in oklab,color-mix(in oklab, oklch(40.8% 0.153 2.432) 30%,transparent) 100%,transparent);
+      }
+      #num.unheard {
+        background: linear-gradient(135deg, transparent 0%, #ffffff07 33%, transparent 60%, #ffffff07 100%),
+          linear-gradient(to bottom right in oklab, color-mix(in oklab, #00ffbe 90%,transparent) 0%, color-mix(in oklab, #00cbe6 90%,transparent) 50%, color-mix(in oklab, #0096ff 90%,transparent) 100%), linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 40%, transparent 100%);
+        border: 3px solid oklch(0.905399 0.1646 194.7689);
+        color: oklch(0.959 0.0657 184.21);
+        box-shadow: 0 0 24px color-mix(in oklab,color-mix(in oklab, oklch(0.905 0.1646 194.7689) 30%,transparent) 100%,transparent),0 0 42px color-mix(in oklab,color-mix(in oklab, oklch(0.905 0.1646 194.7689) 30%,transparent) 100%,transparent);
+      }
+      
+      #rarity.trash, #ep.trash, .badge.trash {
+        color: oklch(87.9% 0.169 91.605);
+        background-color: color-mix(in oklab, oklch(27.9% 0.077 45.635) 40%, transparent);
+        border: 1px solid color-mix(in oklab, oklch(47.3% 0.137 46.201) 60%, transparent);
+      }
+      .badge.common {
+        background-color: oklch(27.4% 0.006 286.033);
+        border: 1px solid oklch(44.2% 0.017 285.786);
+        color: oklch(87.2% 0.01 258.338);
+      }
+      #rarity.uncommon, #ep.uncommon, .badge.uncommon {
+        color: oklch(76.5% 0.177 163.223);
+        background-color: color-mix(in oklab, oklch(26.2% 0.051 172.552) 40%, transparent);
+        border: 1px solid color-mix(in oklab, oklch(43.2% 0.095 166.913) 60%, transparent);
+      }
+      #rarity.rare, #ep.rare, .badge.rare {
+        color: oklch(70.7% 0.165 254.624);
+        background-color: color-mix(in oklab, oklch(28.2% 0.091 267.935) 40%, transparent);
+        border: 1px solid color-mix(in oklab, oklch(42.4% 0.199 265.638) 60%, transparent);
+      }
+      #rarity.epic, #ep.epic, .badge.epic {
+        color: oklch(71.4% 0.203 305.504);
+        background-color: color-mix(in oklab, oklch(29.1% 0.149 302.717) 40%, transparent);
+        border: 1px solid color-mix(in oklab, oklch(43.8% 0.218 303.724) 60%, transparent);
+      }
+      #rarity.anomaly, #ep.anomaly, .badge.anomaly {
+        color: oklch(75% 0.183 55.934);
+        background-color: color-mix(in oklab, oklch(26.6% 0.079 36.259) 40%, transparent);
+        border: 1px solid color-mix(in oklab, oklch(47% 0.157 37.304) 60%, transparent);
+      }
+      #rarity.mythic, #ep.mythic, .badge.mythic {
+        color: oklch(70.4% 0.191 22.216);
+        background-color: color-mix(in oklab, oklch(25.8% 0.092 26.042) 40%, transparent);
+        border: 1px solid color-mix(in oklab, oklch(45.9% 0.187 3.815) 60%, transparent);
+      }
+      #rarity.unheard, #ep.unheard, .badge.unheard {
+        color: oklch(0.875 0.0896 224.81);
+        background-color: color-mix(in oklab, oklch(0.662 0.201 249.84) 40%, transparent);
+        border: 1px solid color-mix(in oklab, oklch(0.662 0.1519 194.77) 60%, transparent);
+      }
+      /* bg: oklch(0.4165 0.2891 264.05) border: oklch(0.426 0.1929 256.87) color: oklch(0.8076 0.119 238.49) */
+      
+      .badge {
+        border-radius: 999px;
+        padding-inline: 0.5rem;
+        padding-block: 0.125rem;
+        display: inline-flex;
+        cursor: pointer;
+        flex-wrap: wrap;
+        margin-right: 0.375rem;
+        margin-bottom: 0.375rem;
+        width: fit-content;
+      }
+      .tooltip {
+        position: fixed;
+        padding: 0.5rem;
+        display: none;
+        background-color: #000014;
+        color: #fafafa;
+        border: 2.7px solid #fafafa;
+        border-radius: 0.3rem;
+        pointer-events: none;
+        z-index: 999;
+      }
+      #share {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #percentile.uncommon {
+        color: oklch(69.6% 0.17 162.48);
+      }
+      #percentile.rare, #percentile.epic {
+        color: oklch(72.3% 0.219 149.579);
+      }
+      #percentile.anomaly, #percentile.mythic {
+        color: oklch(79.5% 0.184 86.047);
+      }
+      #percentile.unheard {
+        color: oklch(0.875 0.0896 224.81);
+      }
+      #permalink {margin-inline: 0; transition: all 0.2s;}
+      #permalink:hover {margin-inline: 0.75em;}
+      #permalink:active {margin-inline: -0.25em;}
+      
+      .badges {
+        display: flex;
+        flex-wrap: wrap;
+        overflow-wrap: break-word;
+        justify-content: center;
+        gap: 0.5em;
+      }
+      .rbtxt {
+        font-size: 0.8em;
+      }
+      .rbadge {
+        width: 20em;
+        height: 10em;
+        padding: 1em;
+        cursor: pointer;
+      }
+      .rbadge.common {
+        background-color: oklch(27.4% 0.006 286.033);
+        border: 5px solid color-mix(in oklab, oklch(44.2% 0.017 285.786) 60%, transparent);
+      }
+      .rbadge.uncommon {
+        background-color: oklch(26.2% 0.051 172.552);
+        border: 5px solid color-mix(in oklab, oklch(43.2% 0.095 166.913) 60%, transparent);
+      }
+      .rbadge.rare {
+        background-color: oklch(28.2% 0.091 267.935);
+        border: 5px solid color-mix(in oklab, oklch(42.4% 0.199 265.638) 60%, transparent);
+      }
+      .rbadge.epic {
+        background-color: oklch(29.1% 0.149 302.717);
+        border: 5px solid color-mix(in oklab, oklch(43.8% 0.218 303.724) 60%, transparent);
+      }
+      .rbadge.anomaly {
+        background-color: oklch(26.6% 0.079 36.259);
+        border: 5px solid color-mix(in oklab, oklch(47% 0.157 37.304) 60%, transparent);
+      }
+      .rbadge.mythic {
+        background-color: oklch(25.8% 0.092 26.042);
+        border: 5px solid color-mix(in oklab, oklch(45.9% 0.187 3.815) 60%, transparent);
+      }
+      .rbadge.unheard {
+        background-color: #0096ff;
+        border: 5px solid color-mix(in oklab, oklch(0.905399 0.1646 194.7689) 60%, transparent);
+      }
+      .rbadgecontainer {
+        position: fixed;
+        left: 0%;
+        top: 0%;
+        width: 100%;
+        height: 100%;
+        background-color: #3f304733;
+        backdrop-filter: blur(13px);
+      }
+      .rbadgeview {
+        position: fixed;
+        padding: 3em;
+        left: calc(18% - 3em);
+        top: calc(18% - 3em);
+        width: 64%;
+        height: 64%;
+        border: 2.5px solid #4b3c54;
+        background-color: #392f3f;
+        overflow-y: auto;
+        border-radius: 1em;
+        animation: appear 0.1s forwards;
+      }
+      .rbadgename, .\'rbadgename\' {font-weight: bolder; font-size: 1.3em;}
+      .rbadgeep, .smalltext, .\'rbadgeep\', .\'smalltext\' {font-size: 0.9em;}
+      .rbadgefamily, .\'rbadgefamily\' {margin-block: 0.5em;}
+      
+      #username {
+        background-color: oklch(26.1% 0.014 295);
+        padding-inline: 0.75rem;
+        padding-block: 0.475rem;
+        border: none;
+        color: #fefefe;
+        border-radius: 0.5rem;
+        width: 15em;
+      }
+    </style>
+  </head>
+  <body>
+    <center>
+      <div class="header">
+        <button class="back" onclick="window.location.href = 'https://prototypestudios.neocities.org';">← Back to ProtoType Studios</button>
+        <h1 class="large project">RNGpro</h1>
+        <button class="large" id="personalize">Personalize Account</button>
+      </div>
+      <h6 id="description">Check out all the stats of a profile! Click the BACK button below to go back to RNGdle Sandbox.</h6><hr>
+      <button id="share" onclick="window.location.href = 'https://prototypestudios.neocities.org/rngdle';">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left-icon lucide-arrow-left"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+        <span>BACK</span>
+      </button>
+      <label for="username">Username: </label>
+      <input type="text" id="username" placeholder="Enter username to check stats"> <button id="check">Check</button>
+      <div class="tooltip"></div><hr>
+      <h2 class="large">Overall</h2>
+      <p class="medium">Total rolls: <span id="totalrolls">0</span> rolls</p>
+      <p class="medium">Total EP: <span id="totalep">0</span> EP</p>
+      <p class="medium">Best roll: <span id="bestroll">??????</span>, <span id="bestep">0</span> EP - Expected: <span id="expectedbest">0</span> EP</p>
+      <p class="medium">Worst roll: <span id="worstroll">??????</span>, <span id="worstep">0</span> EP - Expected: <span id="expectedworst">0</span> EP</p>
+      <p class="medium">Average EP: <span id="meanep">0</span> EP - Expected: 21 835 EP</p>
+      <p class="medium">Median EP: <span id="medianep">0</span> EP - Expected: 5 803 EP</p>
+      <h2 class="large">Rolls</h2>
+      <p class="medium">Unheard (Top 0.1%): <span id="unheards">0</span> unheard - Expected: <span id="expectedunheards">0</span> unheards</p>
+      <p class="medium">Mythic (Top 1%): <span id="mythics">0</span> mythics - Expected: <span id="expectedmythics">0</span> mythics</p>
+      <p class="medium">Anomaly (Top 5%): <span id="anomalies">0</span> anomalies - Expected: <span id="expectedanomalies">0</span> anomalies</p>
+      <p class="medium">Epic (Top 10%): <span id="epics">0</span> epics - Expected: <span id="expectedepics">0</span> epics</p>
+      <p class="medium">Rare (Top 25%): <span id="rares">0</span> rares - Expected: <span id="expectedrares">0</span> rares</p>
+      <p class="medium">Uncommon (Top 50%): <span id="uncommons">0</span> uncommons - Expected: <span id="expecteduncommons">0</span> uncommons</p>
+      <p class="medium">Common (Top 99%): <span id="mythics">0</span> commons - Expected: <span id="expectedcommons">0</span> commons</p>
+      <p class="medium">Trash (Bottom 1%): <span id="mythics">0</span> trashes - Expected: <span id="expectedtrashes">0</span> trashes</p>
+      <h2 class="large">Luck</h2>
+      <p class="medium">Average Roll luck: <span id="avgluck">0</span>%</p>
+      <p class="medium">Best Roll luck: <span id="bestluck">0</span>%</p>
+      <p class="medium">Worst Roll luck: <span id="bestluck">0</span>%</p>
+      <p class="medium">Total luck: <span id="totalluck">0</span> r-score(s)</p>
+      <h2 class="large">Account</h2>
+      <p class="medium">First roll: <span id="joindate">21.05.2026</span></p>
+      <p class="medium">Current streak: <span id="currentstreak">0</span> day(s)</p>
+      <p class="medium">Longest streak: <span id="longeststreak">0</span> day(s)</p>
+      <h2 class="large">Badges</h2>
+      <p class="medium">Badges collected: <span id="badgescollected">0</span> badges (<span id="badgespercent">0</span>%)</p>
+      <p class="medium">Rarest badge: <span id="rarestbadge">Six Digits</span></p>
+      <p class="medium">Days since last badge: <span id="dayssince">0</span> days</p>
+      <hr><footer>© 2026 ProtoType Studios. All rights reserved.</footer><footer>This project and its owner are not affiliated with RNGdle or its owner.</footer>
+    </center>
+    <script>
+      document.querySelector("#check").onclick = async () => {
+        const response = await fetch(`https://rngdle-sandbox.scratchy271.workers.dev/${document.querySelector("#username").value}`);
+        const json = await response.json();
+        if (!json.error) {
+          let rolls = json.rolls.map(r => r.totalScore);
+          let expected = r => Math.min(2380.95292 * (1 / ((-0.01 * r + 1) ** 2.15584724044) - 1) ** 0.430372238202 + 1759, 186186584);
+          document.querySelector("#totalrolls").textContent = rolls.length.toLocaleString();
+          document.querySelector("#totalep").textContent = rolls.reduce((a, c) => a + c, 0).toLocaleString();
+          document.querySelector("#bestep").textContent = Math.max(...rolls).toLocaleString();
+          document.querySelector("#expectedbest").textContent = Math.round(expected(50+50*(rolls.length-1)/rolls.length)).toLocaleString();
+          document.querySelector("#worstep").textContent = Math.min(...rolls).toLocaleString();
+          document.querySelector("#expectedworst").textContent = Math.round(expected(50-50*(rolls.length-1)/rolls.length)).toLocaleString();
+          document.querySelector("#meanep").textContent = Math.round(rolls.reduce((a, c) => a + c/rolls.length, 0)).toLocaleString();
+          document.querySelector("#medianep").textContent = Math.round((s => (s.length % 2 ? s[Math.floor(s.length/2)] : (s[s.length/2-1] + s[s.length/2]) / 2))(rolls.sort((a, b) => a - b))).toLocaleString();
+          document.querySelector("#unheards").textContent = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard").filter(tier => tier == "unheard").length.toLocaleString();
+          document.querySelector("#expectedunheards").textContent = Math.round(rolls.length / 1000).toLocaleString();
+          document.querySelector("#mythics").textContent = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard").filter(tier => tier == "mythic").length.toLocaleString();
+          document.querySelector("#expectedmythics").textContent = Math.round(rolls.length / 111.11111).toLocaleString();
+          document.querySelector("#anomalies").textContent = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard").filter(tier => tier == "anomaly").length.toLocaleString();
+          document.querySelector("#expectedanomalies").textContent = Math.round(rolls.length / 25).toLocaleString();
+          document.querySelector("#epics").textContent = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard").filter(tier => tier == "epic").length.toLocaleString();
+          document.querySelector("#expectedepics").textContent = Math.round(rolls.length / 20).toLocaleString();
+          document.querySelector("#rares").textContent = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard").filter(tier => tier == "rare").length.toLocaleString();
+          document.querySelector("#expectedrares").textContent = Math.round(rolls.length / 6.66667).toLocaleString();
+          document.querySelector("#uncommons").textContent = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard").filter(tier => tier == "uncommon").length.toLocaleString();
+          document.querySelector("#expecteduncommons").textContent = Math.round(rolls.length / 4).toLocaleString();
+          document.querySelector("#commons").textContent = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard").filter(tier => tier == "common").length.toLocaleString();
+          document.querySelector("#expectedcommons").textContent = Math.round(rolls.length / 2.040816).toLocaleString();
+          document.querySelector("#trashes").textContent = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard").filter(tier => tier == "trash").length.toLocaleString();
+          document.querySelector("#expectedtrashes").textContent = Math.round(rolls.length / 100).toLocaleString();
+        }
+      }
+    </script>
+  </body>
+</html>
