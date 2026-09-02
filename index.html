@@ -434,7 +434,7 @@
       <p class="medium">Average EP: <span id="meanep">0</span> EP - Expected: 21 835 EP</p>
       <p class="medium">Median EP: <span id="medianep">0</span> EP - Expected: 5 803 EP</p>
       <h2 class="large">Rolls</h2>
-      <p class="medium">Unheard (Top 0.1%): <span id="unheards">0</span> unheard - Expected: <span id="expectedunheards">0</span> unheards</p>
+      <p class="medium">Unheard (Top 0.1%): <span id="unheards">0</span> unheards - Expected: <span id="expectedunheards">0</span> unheards</p>
       <p class="medium">Mythic (Top 1%): <span id="mythics">0</span> mythics - Expected: <span id="expectedmythics">0</span> mythics</p>
       <p class="medium">Anomaly (Top 5%): <span id="anomalies">0</span> anomalies - Expected: <span id="expectedanomalies">0</span> anomalies</p>
       <p class="medium">Epic (Top 10%): <span id="epics">0</span> epics - Expected: <span id="expectedepics">0</span> epics</p>
@@ -443,10 +443,10 @@
       <p class="medium">Common (Top 99%): <span id="commons">0</span> commons - Expected: <span id="expectedcommons">0</span> commons</p>
       <p class="medium">Trash (Bottom 1%): <span id="trashes">0</span> trashes - Expected: <span id="expectedtrashes">0</span> trashes</p>
       <h2 class="large">Luck</h2>
-      <p class="medium">Average Roll luck: <span id="avgluck">0</span>%</p>
-      <p class="medium">Best Roll luck: <span id="bestluck">0</span>%</p>
-      <p class="medium">Worst Roll luck: <span id="bestluck">0</span>%</p>
-      <p class="medium">Total luck: <span id="totalluck">0</span> r-score(s)</p>
+      <p class="medium">Average Roll luck: <span id="avgluck">0.0000</span>%</p>
+      <p class="medium">Best Roll luck: <span id="bestluck">0.0000</span>%</p>
+      <p class="medium">Worst Roll luck: <span id="bestluck">0.0000</span>%</p>
+      <p class="medium">Total luck: <span id="totalluck">0.0000</span> r-score(s)</p>
       <h2 class="large">Account</h2>
       <p class="medium">First roll: <span id="joindate">21.05.2026</span></p>
       <p class="medium">Current streak: <span id="currentstreak">0</span> day(s)</p>
@@ -458,19 +458,24 @@
       <hr><footer>© 2026 ProtoType Studios. All rights reserved.</footer><footer>This project and its owner are not affiliated with RNGdle or its owner.</footer>
     </center>
     <script>
+      let rolls = [];
       document.querySelector("#check").onclick = async () => {
         const response = await fetch(`https://rngdle-sandbox.scratchy271.workers.dev/${document.querySelector("#username").value}`);
         const json = await response.json();
         if (!json.error) {
-          let rolls = json.rolls.map(r => r.totalScore);
           let expected = r => Math.min(2380.95292 * (1 / ((-0.01 * r + 1) ** 2.15584724044) - 1) ** 0.430372238202 + 1759, 186186584);
+          rolls = json.rolls.map(r => r.totalScore);
           document.querySelector("#totalrolls").textContent = rolls.length.toLocaleString();
           document.querySelector("#totalep").textContent = rolls.reduce((a, c) => a + c, 0).toLocaleString();
-          document.querySelector("#bestep").textContent = Math.max(...rolls).toLocaleString();
-          document.querySelector("#expectedbest").textContent = Math.round(expected(50+50*(rolls.length-1)/rolls.length)).toLocaleString();
+          let bestep = Math.max(...rolls);
+          document.querySelector("#bestep").textContent = bestep.toLocaleString();
+          let expectedbest = Math.round(expected(50+50*(rolls.length-1)/rolls.length));
+          document.querySelector("#expectedbest").textContent = expectedbest.toLocaleString();
           document.querySelector("#worstep").textContent = Math.min(...rolls).toLocaleString();
-          document.querySelector("#expectedworst").textContent = Math.round(expected(50-50*(rolls.length-1)/rolls.length)).toLocaleString();
-          document.querySelector("#meanep").textContent = Math.round(rolls.reduce((a, c) => a + c/rolls.length, 0)).toLocaleString();
+          let expectedworst = Math.round(expected(50-50*(rolls.length-1)/rolls.length));
+          document.querySelector("#expectedworst").textContent = expectedworst.toLocaleString();
+          let meanep = Math.round(rolls.reduce((a, c) => a + c/rolls.length, 0));
+          document.querySelector("#meanep").textContent = meanep.toLocaleString();
           document.querySelector("#medianep").textContent = Math.round((s => (s.length % 2 ? s[Math.floor(s.length/2)] : (s[s.length/2-1] + s[s.length/2]) / 2))(rolls.sort((a, b) => a - b))).toLocaleString();
           document.querySelector("#unheards").textContent = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard").filter(tier => tier == "unheard").length.toLocaleString();
           document.querySelector("#expectedunheards").textContent = Math.round(rolls.length / 1000).toLocaleString();
@@ -488,8 +493,15 @@
           document.querySelector("#expectedcommons").textContent = Math.round(rolls.length / 2.040816).toLocaleString();
           document.querySelector("#trashes").textContent = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard").filter(tier => tier == "trash").length.toLocaleString();
           document.querySelector("#expectedtrashes").textContent = Math.round(rolls.length / 100).toLocaleString();
+          let avgluck = Number((100*(meanep - 21835)/21835).toFixed(4));
+          document.querySelector("#avgluck").textContent = avgluck.toLocaleString();
+          let bestluck = Number((100*(bestep - expectedbest)/expectedbest).toFixed(4));
+          document.querySelector("#bestluck").textContent = bestluck.toLocaleString();
+          let worstluck = Number((100*(worstep - expectedworst)/expectedworst).toFixed(4));
+          document.querySelector("#worstluck").textContent = worstluck.toLocaleString();
         }
       }
+      document.querySelector("#personalize").onclick = () => {window.location.href = "https://prototypestudios.neocities.org/personalize";}
     </script>
   </body>
 </html>
