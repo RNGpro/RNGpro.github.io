@@ -2,11 +2,11 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <meta name="description" content="An RNGdle EP calculator. Find out how much EP a number might earn. 100% ACCURATE ON RNGDLE V2!!! 🎉">
-    <meta property="og:description" content="An RNGdle EP calculator. Find out how much EP a number might earn. 100% ACCURATE ON RNGDLE V2!!! 🎉">
+    <meta name="description" content="Check out all the stats of an RNGdle profile! Find out everything about someone's rolls, EP, and luck!">
+    <meta property="og:description" content="Check out all the stats of an RNGdle profile! Find out everything about someone's rolls, EP, and luck!">
     <meta name="author" content="ProtoType Studios">
-    <meta property="og:title" content="RNGdle Sandbox by ProtoType Studios™">
-    <meta property="og:url" content="https://prototypestudios.neocities.org/rngdle">
+    <meta property="og:title" content="RNGpro by ProtoType Studios™">
+    <meta property="og:url" content="https://rngpro.github.io">
     <meta name="theme-color" content="#0a0a0a">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RNGpro</title>
@@ -430,8 +430,8 @@
       <h2 class="large">Overall</h2>
       <p class="medium">Total rolls: <span id="totalrolls">0</span> rolls</p>
       <p class="medium">Total EP: <span id="totalep">0</span> EP</p>
-      <p class="medium">Best roll: <b><span id="bestroll">??????</span></b>, <span id="bestep">0</span> EP - Expected: <span id="expectedbest">0</span> EP</p>
-      <p class="medium">Worst roll: <b><span id="worstroll">??????</span></b>, <span id="worstep">0</span> EP - Expected: <span id="expectedworst">0</span> EP</p>
+      <p class="medium">Best roll: <b><span id="bestroll">??????</span></b>, <span id="bestep">0</span> EP on <span id="bestdate">21.5.2026</span> - Expected: <span id="expectedbest">0</span> EP</p>
+      <p class="medium">Worst roll: <b><span id="worstroll">??????</span></b>, <span id="worstep">0</span> EP on <span id="worstdate">21.5.2026</span> - Expected: <span id="expectedworst">0</span> EP</p>
       <p class="medium">Average EP: <span id="meanep">0</span> EP - Expected: 21 835 EP</p>
       <p class="medium">Median EP: <span id="medianep">0</span> EP - Expected: 5 803 EP</p>
       <h2 class="large">Rolls</h2>
@@ -470,12 +470,16 @@
           document.querySelector("#totalep").textContent = rolls.reduce((a, c) => a + c, 0).toLocaleString();
           let bestep = Math.max(...rolls);
           document.querySelector("#bestroll").textContent = [...json.rolls].sort((a, b) => b.totalScore - a.totalScore)[0].number;
+          let bestdate = new Date([...json.rolls].sort((a, b) => b.totalScore - a.totalScore)[0].rolledAt).toLocaleDateString();
           document.querySelector("#bestep").textContent = bestep.toLocaleString();
+          document.querySelector("#bestdate").textContent = bestdate;
           let expectedbest = Math.round(expected(50+50*(rolls.length-1)/rolls.length));
           document.querySelector("#expectedbest").textContent = expectedbest.toLocaleString();
           let worstep = Math.min(...rolls);
           document.querySelector("#worstroll").textContent = [...json.rolls].sort((a, b) => a.totalScore - b.totalScore)[0].number;
+          let worstdate = new Date([...json.rolls].sort((a, b) => a.totalScore - b.totalScore)[0].rolledAt).toLocaleDateString();
           document.querySelector("#worstep").textContent = worstep.toLocaleString();
+          document.querySelector("#worstdate").textContent = worstdate;
           let expectedworst = Math.round(expected(50-50*(rolls.length-1)/rolls.length));
           document.querySelector("#expectedworst").textContent = expectedworst.toLocaleString();
           let meanep = Math.round(rolls.reduce((a, c) => a + c/rolls.length, 0));
@@ -497,6 +501,19 @@
           document.querySelector("#expectedcommons").textContent = Math.round(rolls.length / 2.040816).toLocaleString();
           document.querySelector("#trashes").textContent = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard").filter(tier => tier == "trash").length.toLocaleString();
           document.querySelector("#expectedtrashes").textContent = Math.round(rolls.length / 100).toLocaleString();
+          let sharetext = `💠 Unheard (Top 0.1%): ${document.querySelector("#unheards").textContent} - Expected: ${Math.round(rolls.length / 1000).toLocaleString()}\n`;
+          sharetext += `🟥 Mythic (Top 1%): ${document.querySelector("#mythics").textContent} - Expected: ${Math.round(rolls.length / 111.11111).toLocaleString()}\n`;
+          sharetext += `🟧 Anomaly (Top 5%): ${document.querySelector("#anomalies").textContent} - Expected: ${Math.round(rolls.length / 25).toLocaleString()}\n`;
+          sharetext += `🟪 Epic (Top 10%): ${document.querySelector("#epic").textContent} - Expected: ${Math.round(rolls.length / 20).toLocaleString()}\n`;
+          sharetext += `🟦 Rare (Top 25%): ${document.querySelector("#rare").textContent} - Expected: ${Math.round(rolls.length / 6.66667).toLocaleString()}\n`;
+          sharetext += `🟩 Uncommon (Top 50%): ${document.querySelector("#uncommon").textContent} - Expected: ${Math.round(rolls.length / 4).toLocaleString()}\n`;
+          sharetext += `⬜ Common (Top 99%): ${document.querySelector("#common").textContent} - Expected: ${Math.round(rolls.length / 2.040816).toLocaleString()}\n`;
+          sharetext += `🟫 Trash (Bottom 1%): ${document.querySelector("#trash").textContent} - Expected: ${Math.round(rolls.length / 100).toLocaleString()}\n\n`;
+          sharetext += `🧮 ${rolls.length.toLocaleString()} Total Rolls\n`;
+          sharetext += `📈 ${rolls.reduce((a, c) => a + c, 0).toLocaleString()} Total EP\n`;
+          sharetext += `💎 Best Roll: ${document.querySelector("#bestroll").textContent} (${bestep.toLocaleString()}) EP on ${bestdate}\n`;
+          sharetext += `🗑️ Worst Roll: ${document.querySelector("#worstroll").textContent} (${worstep.toLocaleString()}) EP on ${worstdate}`;
+          document.querySelector("#copy").onclick = () => {navigator.clipboard.writeText(sharetext);}
           let avgluck = Number((100*(meanep - 21835)/21835).toFixed(4));
           document.querySelector("#avgluck").textContent = avgluck.toLocaleString();
           let bestluck = Number((100*(bestep - expectedbest)/expectedbest).toFixed(4));
