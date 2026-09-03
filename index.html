@@ -519,7 +519,8 @@
           document.querySelector("#expectedworst").textContent = expectedworst.toLocaleString();
           let meanep = Math.round(rolls.reduce((a, c) => a + c/rolls.length, 0));
           document.querySelector("#meanep").textContent = meanep.toLocaleString();
-          document.querySelector("#medianep").textContent = Math.round((s => (s.length % 2 ? s[Math.floor(s.length/2)] : (s[s.length/2-1] + s[s.length/2]) / 2))(rolls.sort((a, b) => a - b))).toLocaleString();
+          let medianep = Math.round((s => (s.length % 2 ? s[Math.floor(s.length/2)] : (s[s.length/2-1] + s[s.length/2]) / 2))(rolls.sort((a, b) => a - b)));
+          document.querySelector("#medianep").textContent = medianep.toLocaleString();
           document.querySelector("#unheards").textContent = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard").filter(tier => tier == "unheard").length.toLocaleString();
           document.querySelector("#expectedunheards").textContent = Math.round(rolls.length / 1000).toLocaleString();
           document.querySelector("#mythics").textContent = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard").filter(tier => tier == "mythic").length.toLocaleString();
@@ -549,18 +550,20 @@
           sharetext += `🟫 Trash (Bottom 1%): ${document.querySelector("#trashes").textContent} - Expected: ${Math.round(rolls.length / 100).toLocaleString()}\n\n`;
           sharetext += `🧮 ${rolls.length.toLocaleString()} Total Rolls\n`;
           sharetext += `🔥 ${current} Day Streak${stars}\n`;
-          sharetext += `🐦‍🔥 ${longest} Max Day Streak\n`;
+          sharetext += `👑 ${longest} Max Day Streak\n`;
           sharetext += `📈 ${rolls.reduce((a, c) => a + c, 0).toLocaleString()} Total EP\n`;
           sharetext += `💎 Best Roll: ${document.querySelector("#bestroll").textContent} (${bestep.toLocaleString()}) EP on ${bestdate}\n`;
           sharetext += `🗑️ Worst Roll: ${document.querySelector("#worstroll").textContent} (${worstep.toLocaleString()}) EP on ${worstdate}`;
           document.querySelector("#copy").onclick = () => {navigator.clipboard.writeText(sharetext); document.querySelector("#copy").textContent = "✅ Copied! :3"; setTimeout(() => {document.querySelector("#copy").textContent = "Copy roll stats"}, 1500);}
           let avgluck = Number((100*(meanep - 21835)/21835).toFixed(4));
           document.querySelector("#avgluck").textContent = avgluck.toLocaleString();
+          let medluck = Number((100*(medianep - 5803)/5803).toFixed(4));
+          document.querySelector("#avgluck").textContent = avgluck.toLocaleString();
           let bestluck = Number((100*(bestep - expectedbest)/expectedbest).toFixed(4));
           document.querySelector("#bestluck").textContent = bestluck.toLocaleString();
           let worstluck = Number((-100*(worstep - expectedworst)/expectedworst).toFixed(4));
           document.querySelector("#worstluck").textContent = worstluck.toLocaleString();
-          document.querySelector("#totalluck").textContent = Math.cbrt((avgluck+bestluck+worstluck)/100).toLocaleString();
+          document.querySelector("#totalluck").textContent = Math.cbrt((avgluck+medep+bestluck+worstluck)/100).toLocaleString();
           document.querySelector("#firstroll").textContent = new Date(json.rolls[rolls.length - 1].rolledAt).toLocaleDateString();
           document.querySelector("#currentstreak").textContent = current.toLocaleString();
           document.querySelector("#longeststreak").textContent = longest.toLocaleString();
