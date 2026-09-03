@@ -459,6 +459,7 @@
     </center>
     <script>
       function streak(rs) {
+        console.log(rs);
       	const dates = [...new Set(rs.map(r => r.rolledAt.slice(0, 10)))].sort();
       	let longest = 0;
         let current = 0;
