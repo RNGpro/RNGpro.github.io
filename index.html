@@ -460,6 +460,7 @@
     <script>
       function streak(rs) {
       	const dates = [...new Set(rs.map(r => r.rolledAt.slice(0, 10)))].sort();
+        if (dates.length == 0) return 0;
       	let longest = 0;
         let current = 0;
       	let cur = 0;
@@ -468,14 +469,28 @@
       		if (previous) {
       			const diff = (Date.parse(date) - Date.parse(previous)) / 86400000;
       			if (Math.abs(diff-1) < 0.05) {cur += 1;}
-            else {if (current == 0) current = cur; cur = 1;}
+            else {cur = 1;}
       		} else {
+            if (current == 0) current = cur;
       			cur = 1;
       		}
       		longest = Math.max(longest, cur);
       		previous = date;
       	}
     	  return [longest, current];
+      }
+      function streak2(rs) {
+      	const dates = [...new Set(rs.map(r => new Date(r.rolledAt).toISOString().slice(0, 10)))].sort().reverse();
+      	if (dates.length == 0) return 0;
+      	let streak = 1;
+      	for (let i = 1; i < dates.length; i++) {
+      		const current = new Date(`${dates[i - 1]}T00:00:00Z`);
+      		const previous = new Date(`${dates[i]}T00:00:00Z`);
+      		const diff = Math.round((current - previous) / 86400000);
+      		if (Math.abs(diff-1) >= 0.05) break;
+      		streak += 1;
+      	}
+      	return streak;
       }
       let rolls = [];
       document.querySelector("#check").onclick = async () => {
