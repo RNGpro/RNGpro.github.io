@@ -447,6 +447,7 @@
       <button id="copy">Copy roll stats</button>
       <h2 class="large">Luck</h2>
       <p class="medium">Average Roll luck: <span id="avgluck">0,0000</span>%</p>
+      <p class="medium">Median Roll luck: <span id="medluck">0,0000</span>%</p>
       <p class="medium">Best Roll luck: <span id="bestluck">0,0000</span>%</p>
       <p class="medium">Worst Roll luck: <span id="worstluck">0,0000</span>%</p>
       <p class="medium">Total luck: <span id="totalluck">0,0000</span> r-score(s)</p>
@@ -563,7 +564,7 @@
           document.querySelector("#bestluck").textContent = bestluck.toLocaleString();
           let worstluck = Number((-100*(worstep - expectedworst)/expectedworst).toFixed(4));
           document.querySelector("#worstluck").textContent = worstluck.toLocaleString();
-          document.querySelector("#totalluck").textContent = Math.cbrt((avgluck+medep+bestluck+worstluck)/100).toLocaleString();
+          document.querySelector("#totalluck").textContent = Math.cbrt((avgluck+medianep+bestluck+worstluck)/100).toLocaleString();
           document.querySelector("#firstroll").textContent = new Date(json.rolls[rolls.length - 1].rolledAt).toLocaleDateString();
           document.querySelector("#currentstreak").textContent = current.toLocaleString();
           document.querySelector("#longeststreak").textContent = longest.toLocaleString();
