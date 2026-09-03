@@ -468,12 +468,11 @@
       		if (previous) {
       			const diff = (Date.parse(date) - Date.parse(previous)) / 86400000;
       			if (Math.abs(diff-1) < 0.05) {cur += 1;}
-            else {cur = 1;}
+            else {if (current == 0) current = cur; cur = 1;}
       		} else {
       			cur = 1;
       		}
       		longest = Math.max(longest, cur);
-          if (current == 0) current = cur;
       		previous = date;
       	}
     	  return [longest, current];
