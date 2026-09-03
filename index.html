@@ -468,11 +468,12 @@
       		if (previous) {
       			const diff = (Date.parse(date) - Date.parse(previous)) / 86400000;
       			if (Math.abs(diff-1) < 0.05) {cur += 1;}
-            else {if (current == 0) current = cur; cur = 1;}
+            else {cur = 1;}
       		} else {
       			cur = 1;
       		}
       		longest = Math.max(longest, cur);
+          if (current == 0) current = cur;
       		previous = date;
       	}
     	  return [longest, current];
@@ -521,6 +522,7 @@
           document.querySelector("#trashes").textContent = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard").filter(tier => tier == "trash").length.toLocaleString();
           document.querySelector("#expectedtrashes").textContent = Math.round(rolls.length / 100).toLocaleString();
           let [longest, current] = streak(json.rolls);
+          let stars = longest == rolls.length && longest == current ? " (💙💎 LEGENDARY STREAK 💎💙)" : longest == current ? " (💛🏅 GOLDEN STREAK 🏅💛)" : current >= longest / 2 ? " (🥈 SILVER STREAK 🥈)" : current >= longest / 5 ? " (🥉 BRONZE STREAK 🥉)" : current >= 7 ? " (COOL STREAK 🕶️)" : current >= 4 ? " (AMATEUR STREAK 🔰)" : current >= 1 ? " (baby streak)" : "";
           let sharetext = `💠 Unheard (Top 0.1%): ${document.querySelector("#unheards").textContent} - Expected: ${Math.round(rolls.length / 1000).toLocaleString()}\n`;
           sharetext += `🟥 Mythic (Top 1%): ${document.querySelector("#mythics").textContent} - Expected: ${Math.round(rolls.length / 111.11111).toLocaleString()}\n`;
           sharetext += `🟧 Anomaly (Top 5%): ${document.querySelector("#anomalies").textContent} - Expected: ${Math.round(rolls.length / 25).toLocaleString()}\n`;
@@ -530,7 +532,7 @@
           sharetext += `⬜ Common (Top 99%): ${document.querySelector("#commons").textContent} - Expected: ${Math.round(rolls.length / 2.040816).toLocaleString()}\n`;
           sharetext += `🟫 Trash (Bottom 1%): ${document.querySelector("#trashes").textContent} - Expected: ${Math.round(rolls.length / 100).toLocaleString()}\n\n`;
           sharetext += `🧮 ${rolls.length.toLocaleString()} Total Rolls\n`;
-          sharetext += `🔥 ${current} Day Streak\n`;
+          sharetext += `🔥 ${current} Day Streak${stars}\n`;
           sharetext += `🐦‍🔥 ${longest} Max Day Streak\n`;
           sharetext += `📈 ${rolls.reduce((a, c) => a + c, 0).toLocaleString()} Total EP\n`;
           sharetext += `💎 Best Roll: ${document.querySelector("#bestroll").textContent} (${bestep.toLocaleString()}) EP on ${bestdate}\n`;
