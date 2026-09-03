@@ -477,7 +477,7 @@
       		longest = Math.max(longest, cur);
       		previous = date;
       	}
-    	  return [longest, current];
+    	  return longest;
       }
       function streak2(rs) {
       	const dates = [...new Set(rs.map(r => new Date(r.rolledAt).toISOString().slice(0, 10)))].sort().reverse();
@@ -535,7 +535,8 @@
           document.querySelector("#expectedcommons").textContent = Math.round(rolls.length / 2.040816).toLocaleString();
           document.querySelector("#trashes").textContent = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard").filter(tier => tier == "trash").length.toLocaleString();
           document.querySelector("#expectedtrashes").textContent = Math.round(rolls.length / 100).toLocaleString();
-          let [longest, current] = streak(json.rolls);
+          let longest = streak(json.rolls);
+          let current = streak2(json.rolls);
           let stars = longest == rolls.length && longest == current ? " (💙💎 LEGENDARY STREAK 💎💙)" : longest == current ? " (💛🏅 GOLDEN STREAK 🏅💛)" : current >= longest / 2 ? " (🥈 SILVER STREAK 🥈)" : current >= longest / 5 ? " (🥉 BRONZE STREAK 🥉)" : current >= 7 ? " (COOL STREAK 🕶️)" : current >= 4 ? " (AMATEUR STREAK 🔰)" : current >= 1 ? " (baby streak)" : "";
           let sharetext = `💠 Unheard (Top 0.1%): ${document.querySelector("#unheards").textContent} - Expected: ${Math.round(rolls.length / 1000).toLocaleString()}\n`;
           sharetext += `🟥 Mythic (Top 1%): ${document.querySelector("#mythics").textContent} - Expected: ${Math.round(rolls.length / 111.11111).toLocaleString()}\n`;
