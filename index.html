@@ -564,7 +564,7 @@
           document.querySelector("#bestluck").textContent = bestluck.toLocaleString();
           let worstluck = Number((-100*(worstep - expectedworst)/expectedworst).toFixed(4));
           document.querySelector("#worstluck").textContent = worstluck.toLocaleString();
-          document.querySelector("#totalluck").textContent = Math.cbrt((avgluck+medianep+bestluck+worstluck)/100).toLocaleString();
+          document.querySelector("#totalluck").textContent = Math.cbrt((avgluck+medluck+bestluck+worstluck)/100).toLocaleString();
           document.querySelector("#firstroll").textContent = new Date(json.rolls[rolls.length - 1].rolledAt).toLocaleDateString();
           document.querySelector("#currentstreak").textContent = current.toLocaleString();
           document.querySelector("#longeststreak").textContent = longest.toLocaleString();
