@@ -589,12 +589,13 @@
           for (r of rolls) {
             const roll = document.createElement("div");
             roll.classList = "roll";
-            roll.innerHTML = `
-            <p class="num">${r[0]}</p><span class="medium"> • ${r[1]} EP</span>
-            <p class="medium">${r[2]} • ${r[3]}</p>
-            <p class="small">${r[5]}</p>
-            `;
-            document.querySelector("#history").appendChild(roll);
+            document.querySelector("#history").insertAdjacentHTML("beforeend", `
+            <div class="roll">
+              <p class="num">${r[0]}</p><span class="medium"> • ${r[1]} EP</span>
+              <p class="medium">${r[2]} • ${r[3]}</p>
+              <p class="small">${r[5]}</p>
+            </div>
+            `);
           }
         }
       }
