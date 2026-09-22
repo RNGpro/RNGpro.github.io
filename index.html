@@ -585,12 +585,13 @@
           document.querySelector("#poemspercent").textContent = (totalpoems/rolls.length*100).toFixed(4);
           document.querySelector("#loading").textContent = document.querySelector("#username").value;
           rolls = json.rolls.map(r => [r.number, r.totalScore, r.badgeCount, r.rolledAt.slice(0, 10), r.heartCount, r.poem]);
+          document.querySelector(".history").innerHTML = "";
           for (r of rolls) {
             const ep = r[1] || 0;
             const rarity = ep < 2087 ? "trash" : ep < 5802 ? "common" : ep < 10074 ? "uncommon" : ep < 22293 ? "rare" : ep < 35469 ? "epic" : ep < 162292 ? "anomaly" : ep < 1054023 ? "mythic" : "unheard";
             document.querySelector(".history").insertAdjacentHTML("beforeend", `
             <div class="roll">
-              <p class="num ${rarity}">${r[0]}</p><p class="medium" style="font-size: 1.25em;">${r[1]} EP</p>
+              <p><span class="num ${rarity}">${r[0]}</span> • <span class="medium" style="font-size: 1.25em;">${r[1]} EP</span></p>
               <p class="medium">${r[2]} badges • ${r[3]}</p>
               <p class="small">${r[5]}</p>
             </div>
