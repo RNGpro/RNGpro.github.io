@@ -410,6 +410,13 @@
         border-radius: 0.5rem;
         width: 15em;
       }
+      .roll {
+        width: 90%;
+        height: 5em;
+        padding: 1em;
+        border-radius: 1em;
+        background-color: #303336;
+      }
     </style>
   </head>
   <body>
@@ -579,7 +586,16 @@
           document.querySelector("#poemspercent").textContent = (totalpoems/rolls.length*100).toFixed(4);
           document.querySelector("#loading").textContent = document.querySelector("#username").value;
           rolls = json.rolls.map(r => [r.number, r.totalScore, r.badgeCount, r.rolledAt.slice(0, 10), r.heartCount, r.poem]);
-          console.log(rolls);
+          for (r of rolls) {
+            const roll = document.createElement("div");
+            roll.classList = "roll";
+            roll.innerHTML = `
+            <p class="num">${r[0]}</p><span class="medium"> • ${r[1]} EP</span>
+            <p class="medium">${r[2]} • ${r[3]}</p>
+            <p class="small">${r[5]}</p>
+            `;
+            document.querySelector("#history").appendChild(roll);
+          }
         }
       }
       document.querySelector("#personalize").onclick = () => {window.location.href = "https://prototypestudios.neocities.org/personalize";}
