@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8">
     <meta name="google-site-verification" content="BWm1J50l9kKjTqZ5z1F74_V29W6lzuSk2_LNsNPiN3s" />
-    <meta name="description" content="Check out all the stats of an RNGdle profile! Find out everything about someone's rolls, EP, and luck!">
-    <meta property="og:description" content="Check out all the stats of an RNGdle profile! Find out everything about someone's rolls, EP, and luck!">
+    <meta name="description" content="One of the RNGdle tools for analyzing profiles! Find out everything about someone's rolls, EP, and luck!">
+    <meta property="og:description" content="One of the RNGdle tools for analyzing profiles! Find out everything about someone's rolls, EP, and luck!">
     <meta name="author" content="ProtoType Studios">
     <meta property="og:title" content="RNGpro by ProtoType Studios™">
     <meta property="og:url" content="https://rngpro.github.io">
@@ -426,7 +426,7 @@
         <h1 class="large project">RNGpro</h1>
         <button class="large" id="personalize">Personalize Account</button>
       </div>
-      <h6 id="description">Check out all the stats of a profile! Click the BACK button below to go back to RNGdle Sandbox.</h6><hr>
+      <h6 id="description">One of the RNGdle tools for analyzing profiles! Click the BACK button below to go back to RNGdle Sandbox.</h6><hr>
       <button id="share" onclick="window.location.href = 'https://prototypestudios.neocities.org/rngdle';">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left-icon lucide-arrow-left"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
         <span>BACK</span>
@@ -435,6 +435,7 @@
       <input type="text" id="username" placeholder="Enter username to check stats"> <button id="check">Check</button>
       <div class="tooltip"></div><hr>
       <h2 id="loading">^ Enter username above ^</h2>
+      <button id="copy2" style="margin: 0;" onclick="navigator.clipboard.writeText(document.querySelector('#loading').textContent)">Copy username</button>
       <h2 class="large">Overall</h2>
       <p class="medium">Total rolls: <span id="totalrolls">0</span> rolls</p>
       <p class="medium">Total EP: <span id="totalep">0</span> EP</p>
@@ -590,7 +591,7 @@
             const rarity = ep < 2087 ? "trash" : ep < 5802 ? "common" : ep < 10074 ? "uncommon" : ep < 22293 ? "rare" : ep < 35469 ? "epic" : ep < 162292 ? "anomaly" : ep < 1054023 ? "mythic" : "unheard";
             document.querySelector(".history").insertAdjacentHTML("beforeend", `
             <div class="roll">
-              <p><span class="num ${rarity}">${r[0]}</span> • <span class="medium" style="font-size: 1.1em;">${r[1]} EP [${rarity}] • ${r[2]} badges • ${r[3]} • ${r[4]} heart${r[4] == 1 ? "" : "s"}</span></p>
+              <p><span class="num ${rarity}">${r[0]}</span><span class="medium" style="font-size: 1.1em;">${r[1]} EP [${rarity}] • ${r[2]} badges • ${r[3]} • ${r[4]} heart${r[4] == 1 ? "" : "s"}</span></p>
               <p class="small">${r[5] ?? "No poem"}</p>
             </div>
             `);
