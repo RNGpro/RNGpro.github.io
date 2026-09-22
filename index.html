@@ -433,8 +433,8 @@
       <p class="medium">Total EP: <span id="totalep">0</span> EP</p>
       <p class="medium">Best roll: <b><span id="bestroll">??????</span></b>, <span id="bestep">0</span> EP on <span id="bestdate">21.5.2026</span> - Expected: <span id="expectedbest">0</span> EP</p>
       <p class="medium">Worst roll: <b><span id="worstroll">??????</span></b>, <span id="worstep">0</span> EP on <span id="worstdate">21.5.2026</span> - Expected: <span id="expectedworst">0</span> EP</p>
-      <p class="medium">Average EP: <span id="meanep">0</span> EP - Expected: 21 835 EP</p>
-      <p class="medium">Median EP: <span id="medianep">0</span> EP - Expected: 5 803 EP</p>
+      <p class="medium">Average EP: <span id="meanep">0</span> EP - Expected: 21 545 EP</p>
+      <p class="medium">Median EP: <span id="medianep">0</span> EP - Expected: 5 801 EP</p>
       <h2 class="large">Rolls</h2>
       <p class="medium">Unheard (Top 0.1%): <span id="unheards">0</span> unheards - Expected: <span id="expectedunheards">0</span> unheards</p>
       <p class="medium">Mythic (Top 1%): <span id="mythics">0</span> mythics - Expected: <span id="expectedmythics">0</span> mythics</p>
@@ -556,9 +556,9 @@
           sharetext += `💎 Best Roll: ${document.querySelector("#bestroll").textContent} (${bestep.toLocaleString()}) EP on ${bestdate}\n`;
           sharetext += `🗑️ Worst Roll: ${document.querySelector("#worstroll").textContent} (${worstep.toLocaleString()}) EP on ${worstdate}`;
           document.querySelector("#copy").onclick = () => {navigator.clipboard.writeText(sharetext); document.querySelector("#copy").textContent = "✅ Copied! :3"; setTimeout(() => {document.querySelector("#copy").textContent = "Copy roll stats"}, 1500);}
-          let avgluck = Number((100*(meanep - 21835)/21835).toFixed(4));
+          let avgluck = Number((100*(meanep - 21545)/21545).toFixed(4));
           document.querySelector("#avgluck").textContent = avgluck.toLocaleString();
-          let medluck = Number((100*(medianep - 5803)/5803).toFixed(4));
+          let medluck = Number((100*(medianep - 5801)/5801).toFixed(4));
           document.querySelector("#medluck").textContent = medluck.toLocaleString();
           let bestluck = Number((100*(bestep - expectedbest)/expectedbest).toFixed(4));
           document.querySelector("#bestluck").textContent = bestluck.toLocaleString();
