@@ -526,21 +526,22 @@
           document.querySelector("#meanep").textContent = meanep.toLocaleString();
           let medianep = Math.round((s => (s.length % 2 ? s[Math.floor(s.length/2)] : (s[s.length/2-1] + s[s.length/2]) / 2))(rolls.sort((a, b) => a - b)));
           document.querySelector("#medianep").textContent = medianep.toLocaleString();
-          document.querySelector("#unheards").textContent = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard").filter(tier => tier == "unheard").length.toLocaleString();
+          let tiers = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard");
+          document.querySelector("#unheards").textContent = tiers.filter(tier => tier == "unheard").length.toLocaleString();
           document.querySelector("#expectedunheards").textContent = Math.round(rolls.length / 1000).toLocaleString();
-          document.querySelector("#mythics").textContent = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard").filter(tier => tier == "mythic").length.toLocaleString();
+          document.querySelector("#mythics").textContent = tiers.filter(tier => tier == "mythic").length.toLocaleString();
           document.querySelector("#expectedmythics").textContent = Math.round(rolls.length / 111.11111).toLocaleString();
-          document.querySelector("#anomalies").textContent = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard").filter(tier => tier == "anomaly").length.toLocaleString();
+          document.querySelector("#anomalies").textContent = tiers.filter(tier => tier == "anomaly").length.toLocaleString();
           document.querySelector("#expectedanomalies").textContent = Math.round(rolls.length / 25).toLocaleString();
-          document.querySelector("#epics").textContent = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard").filter(tier => tier == "epic").length.toLocaleString();
+          document.querySelector("#epics").textContent = tiers.filter(tier => tier == "epic").length.toLocaleString();
           document.querySelector("#expectedepics").textContent = Math.round(rolls.length / 20).toLocaleString();
-          document.querySelector("#rares").textContent = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard").filter(tier => tier == "rare").length.toLocaleString();
+          document.querySelector("#rares").textContent = tiers.filter(tier => tier == "rare").length.toLocaleString();
           document.querySelector("#expectedrares").textContent = Math.round(rolls.length / 6.66667).toLocaleString();
-          document.querySelector("#uncommons").textContent = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard").filter(tier => tier == "uncommon").length.toLocaleString();
+          document.querySelector("#uncommons").textContent = tiers.filter(tier => tier == "uncommon").length.toLocaleString();
           document.querySelector("#expecteduncommons").textContent = Math.round(rolls.length / 4).toLocaleString();
-          document.querySelector("#commons").textContent = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard").filter(tier => tier == "common").length.toLocaleString();
+          document.querySelector("#commons").textContent = tiers.filter(tier => tier == "common").length.toLocaleString();
           document.querySelector("#expectedcommons").textContent = Math.round(rolls.length / 2.040816).toLocaleString();
-          document.querySelector("#trashes").textContent = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard").filter(tier => tier == "trash").length.toLocaleString();
+          document.querySelector("#trashes").textContent = tiers.filter(tier => tier == "trash").length.toLocaleString();
           document.querySelector("#expectedtrashes").textContent = Math.round(rolls.length / 100).toLocaleString();
           let longest = streak(json.rolls);
           let current = streak2(json.rolls);
@@ -577,6 +578,8 @@
           document.querySelector("#totalpoems").textContent = totalpoems.toLocaleString();
           document.querySelector("#poemspercent").textContent = (totalpoems/rolls.length*100).toFixed(4);
           document.querySelector("#loading").textContent = document.querySelector("#username").value;
+          rolls = json.rolls.map(r => [r.number, r.totalScore, r.badgeCount, r.rolledAt.slice(0, 10), r.heartCount, r.poem]);
+          console.log(rolls);
         }
       }
       document.querySelector("#personalize").onclick = () => {window.location.href = "https://prototypestudios.neocities.org/personalize";}
