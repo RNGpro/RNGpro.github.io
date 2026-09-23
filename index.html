@@ -557,14 +557,14 @@
       		longestAnomaly: longest.anomaly,
       		longestMythic: longest.mythic,
       		longestUnheard: longest.unheard,
-          daysWithoutTrash: without.trash,
-          daysWithoutCommon: without.common,
-      		daysWithoutUncommon: without.uncommon,
-      		daysWithoutRare: without.rare,
-      		daysWithoutEpic: without.epic,
-      		daysWithoutAnomaly: without.anomaly,
-      		daysWithoutMythic: without.mythic,
-      		daysWithoutUnheard: without.unheard
+          withoutTrash: without.trash,
+          withoutCommon: without.common,
+      		withoutUncommon: without.uncommon,
+      		withoutRare: without.rare,
+      		withoutEpic: without.epic,
+      		withoutAnomaly: without.anomaly,
+      		withoutMythic: without.mythic,
+      		withoutUnheard: without.unheard
       	};
       }
       let rolls = [];
@@ -638,9 +638,23 @@
           document.querySelector("#bestluck").textContent = bestluck.toLocaleString();
           let worstluck = Number((-100*(worstep - expectedworst)/expectedworst).toFixed(4));
           document.querySelector("#worstluck").textContent = worstluck.toLocaleString();
-          const {longestTrash, longestCommon, longestUncommon, longestRare, longestEpic, longestAnomaly, longestMythic, longestUnheard, daysWithoutTrash, daysWithoutCommon, daysWithoutUncommon, daysWithoutRare, daysWithoutEpic, daysWithoutAnomaly, daysWithoutMythic, daysWithoutUnheard} = streak3(json.rolls);
-          console.log(longestTrash, longestCommon, longestUncommon, longestRare, longestEpic, longestAnomaly, longestMythic, longestUnheard, daysWithoutTrash, daysWithoutCommon, daysWithoutUncommon, daysWithoutRare, daysWithoutEpic, daysWithoutAnomaly, daysWithoutMythic, daysWithoutUnheard)
-          document.querySelector("#totalluck").textContent = Math.cbrt((avgluck+medluck+bestluck+worstluck)/100).toLocaleString();
+          const {longestTrash, longestCommon, longestUncommon, longestRare, longestEpic, longestAnomaly, longestMythic, longestUnheard, withoutTrash, withoutCommon, withoutUncommon, withoutRare, withoutEpic, withoutAnomaly, withoutMythic, withoutUnheard} = streak3(json.rolls);
+          document.querySelector("#trashstreak").textContent = `${longestTrash} in a row (1 in ${(1/0.01^longestTrash).toFixed(2)})`;
+          document.querySelector("#commonstreak").textContent = `${longestCommon} in a row (1 in ${(1/0.49^longestCommon).toFixed(2)})`;
+          document.querySelector("#uncommonstreak").textContent = `${longestUncommon} in a row (1 in ${(1/0.25^longestUncommon).toFixed(2)})`;
+          document.querySelector("#rarestreak").textContent = `${longestRare} in a row (1 in ${(1/0.15^longestRare).toFixed(2)})`;
+          document.querySelector("#epicstreak").textContent = `${longestEpic} in a row (1 in ${(1/0.05^longestEpic).toFixed(2)})`;
+          document.querySelector("#anomalystreak").textContent = `${longestAnomaly} in a row (1 in ${(1/0.04^longestAnomaly).toFixed(2)})`;
+          document.querySelector("#mythicstreak").textContent = `${longestMythic} in a row (1 in ${(1/0.009^longestMythic).toFixed(2)})`;
+          document.querySelector("#unheardstreak").textContent = `${longestUnheard} in a row (1 in ${(1/0.001^longestUnheard).toFixed(2)})`;
+          document.querySelector("#withouttrash").textContent = `${withoutTrash} in a row (1 in ${(1/0.99^withoutTrash).toFixed(2)})`;
+          document.querySelector("#withoutcommon").textContent = `${withoutCommon} in a row (1 in ${(1/0.51^withoutCommon).toFixed(2)})`;
+          document.querySelector("#withoutuncommon").textContent = `${withoutUncommon} in a row (1 in ${(1/0.75^withoutUncommon).toFixed(2)})`;
+          document.querySelector("#withoutrare").textContent = `${withoutRare} in a row (1 in ${(1/0.85^withoutRare).toFixed(2)})`;
+          document.querySelector("#withoutepic").textContent = `${withoutEpic} in a row (1 in ${(1/0.95^withoutEpic).toFixed(2)})`;
+          document.querySelector("#withoutanomaly").textContent = `${withoutAnomaly} in a row (1 in ${(1/0.96^withoutAnomaly).toFixed(2)})`;
+          document.querySelector("#withoutmythic").textContent = `${withoutMythic} in a row (1 in ${(1/0.991^withoutMythic).toFixed(2)})`;
+          document.querySelector("#withoutunheard").textContent = `${withoutUnheard} in a row (1 in ${(1/0.999^withoutUnheard).toFixed(2)})`;
           document.querySelector("#firstroll").textContent = new Date(json.rolls[rolls.length - 1].rolledAt).toLocaleDateString();
           document.querySelector("#currentstreak").textContent = current.toLocaleString();
           document.querySelector("#longeststreak").textContent = longest.toLocaleString();
