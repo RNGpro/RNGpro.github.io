@@ -571,14 +571,15 @@
       	}
       	const dates = [...new Set(rs.map(r => new Date(r.rolledAt).toISOString().slice(0, 10)))].sort().reverse();
       	const without = {};
-      	for (const r of rarities) {
-      		let days = 0;
-      		for (const d of dates) {
-      			if (rs.some(rr => new Date(rr.rolledAt).toISOString().slice(0, 10) == d && getRarity(rr.totalScore) == r)) break;
-      			days += 1;
-      		}
-      		without[r] = days;
-      	}
+        for (const r of rarities) {
+        	let current = 0;
+        	let longest = 0;
+        	for (const d of dates) {
+        		if (rs.some(rr => new Date(rr.rolledAt).toISOString().slice(0, 10) == d && getRarity(rr.totalScore) == r);) current = 0;
+        		else {current += 1; longest = Math.max(longest, current);}
+        	}
+        	without[r] = longest;
+        }
       	return {
           longestTrash: longest.trash,
       		longestCommon: longest.common,
