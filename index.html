@@ -460,7 +460,23 @@
       <p class="medium">Median Roll luck: <span id="medluck">0,0000</span>%</p>
       <p class="medium">Best Roll luck: <span id="bestluck">0,0000</span>%</p>
       <p class="medium">Worst Roll luck: <span id="worstluck">0,0000</span>%</p>
-      <p class="medium">Total luck: <span id="totalluck">0,0000</span> r-score(s)</p>
+      <p class="medium">Longest Trash streak: <span id="trashstreak">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">Longest Common streak: <span id="commonstreak">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">Longest Uncommon streak: <span id="uncommonstreak">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">Longest Rare streak: <span id="rarestreak">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">Longest Epic streak: <span id="epicstreak">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">Longest Anomaly streak: <span id="anomalystreak">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">Longest Mythic streak: <span id="mythicstreak">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">Longest Unheard streak: <span id="unheardstreak">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">Longest without Trash: <span id="withouttrash">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">Longest without Common: <span id="withoutcommon">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">Longest without Uncommon: <span id="withoutuncommon">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">Longest without Rare: <span id="withoutrare">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">Longest without Epic: <span id="withoutepic">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">Longest without Anomaly: <span id="withoutanomaly">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">Longest without Mythic: <span id="withoutmythic">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">Longest without Unheard: <span id="withoutunheard">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">Total luck: <span id="totalluck">0,0000</span> r-score(s)<span class="small"> - scroll to the bottom to view what this means</span></p>
       <h2 class="large">Account</h2>
       <p class="medium">First roll: <span id="firstroll">21.5.2026</span></p>
       <p class="medium">Current streak: <span id="currentstreak">0</span> day(s)</p>
@@ -506,6 +522,50 @@
       		streak += 1;
       	}
       	return streak;
+      }
+      function streak3(rs) {
+      	function getRarity(ep) {return ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard";}
+      	const rarities = ["trash", "common", "uncommon", "rare", "epic", "anomaly", "mythic", "unheard"];
+      	const longest = {};
+      	const current = {};
+      	for (const r of rarities) {longest[r] = 0; current[r] = 0;}
+      	for (const r of rs) {
+      		const rarity = getRarity(r.totalScore);
+      		for (const rr of rarities) {
+      			if (rr == rarity) {
+      				current[rr] += 1;
+      				longest[rr] = Math.max(longest[rr], current[rr]);
+      			} else current[rr] = 0;
+      		}
+      	}
+      	const dates = [...new Set(rs.map(r => new Date(r.rolledAt).toISOString().slice(0, 10)))].sort().reverse();
+      	const without = {};
+      	for (const r of rarities) {
+      		let days = 0;
+      		for (const d of dates) {
+      			if (rs.some(rr => new Date(rr.rolledAt).toISOString().slice(0, 10) == d && getRarity(rr.totalScore) == r)) break;
+      			days += 1;
+      		}
+      		without[r] = days;
+      	}
+      	return {
+          longestTrash: longest.trash,
+      		longestCommon: longest.common,
+      		longestUncommon: longest.uncommon,
+      		longestRare: longest.rare,
+      		longestEpic: longest.epic,
+      		longestAnomaly: longest.anomaly,
+      		longestMythic: longest.mythic,
+      		longestUnheard: longest.unheard,
+          daysWithoutTrash: without.trash,
+          daysWithoutCommon: without.common,
+      		daysWithoutUncommon: without.uncommon,
+      		daysWithoutRare: without.rare,
+      		daysWithoutEpic: without.epic,
+      		daysWithoutAnomaly: without.anomaly,
+      		daysWithoutMythic: without.mythic,
+      		daysWithoutUnheard: without.unheard
+      	};
       }
       let rolls = [];
       document.querySelector("#check").onclick = async () => {
@@ -578,6 +638,8 @@
           document.querySelector("#bestluck").textContent = bestluck.toLocaleString();
           let worstluck = Number((-100*(worstep - expectedworst)/expectedworst).toFixed(4));
           document.querySelector("#worstluck").textContent = worstluck.toLocaleString();
+          const {longestTrash, longestCommon, longestUncommon, longestRare, longestEpic, longestAnomaly, longestMythic, longestUnheard, daysWithoutTrash, daysWithoutCommon, daysWithoutUncommon, daysWithoutRare, daysWithoutEpic, daysWithoutAnomaly, daysWithoutMythic, daysWithoutUnheard} = streak3(json.rolls);
+          console.log(longestTrash, longestCommon, longestUncommon, longestRare, longestEpic, longestAnomaly, longestMythic, longestUnheard, daysWithoutTrash, daysWithoutCommon, daysWithoutUncommon, daysWithoutRare, daysWithoutEpic, daysWithoutAnomaly, daysWithoutMythic, daysWithoutUnheard)
           document.querySelector("#totalluck").textContent = Math.cbrt((avgluck+medluck+bestluck+worstluck)/100).toLocaleString();
           document.querySelector("#firstroll").textContent = new Date(json.rolls[rolls.length - 1].rolledAt).toLocaleDateString();
           document.querySelector("#currentstreak").textContent = current.toLocaleString();
