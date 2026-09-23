@@ -593,8 +593,8 @@
             const ep = r[1] || 0;
             const rarity = ep < 2087 ? "trash" : ep < 5802 ? "common" : ep < 10074 ? "uncommon" : ep < 22293 ? "rare" : ep < 35469 ? "epic" : ep < 162292 ? "anomaly" : ep < 1054023 ? "mythic" : "unheard";
             document.querySelector(".history").insertAdjacentHTML("beforeend", `
-            <div class="roll">
-              <p><span class="num ${rarity}" style="background-color: ${rarity == "trash" ? "oklch(0.2976 0.0809 60.92)" : rarity == "common" ? "oklch(0.2507 0.0048 248.02)" : rarity == "uncommon" ? "oklch(0.2976 0.1315 145.43)" : rarity == "rare" ? "oklch(0.2976 0.1375 257)" : rarity == "epic" ? "oklch(0.2976 0.1652 303.34)" : rarity == "anomaly" ? "oklch(0.6269 0.2173 41.29)" : rarity == "mythic" ? "oklch(0.2976 0.1375 24.25)" : "oklch(0.7478 0.1869 224.81)"}" onclick="window.location.href = 'https://prototypestudios.neocities.org/rngdle?n=${r[0]}';">${r[0]}</span><span class="medium" style="font-size: 1.1em;">${r[1]} EP [${rarity}] • ${r[2]} badges • ${r[3]} • ${r[4]} heart${r[4] == 1 ? "" : "s"}</span></p>
+            <div class="roll" style="background-color: ${rarity == "trash" ? "oklch(0.2976 0.0809 60.92)" : rarity == "common" ? "oklch(0.2507 0.0048 248.02)" : rarity == "uncommon" ? "oklch(0.2976 0.1315 145.43)" : rarity == "rare" ? "oklch(0.2976 0.1375 257)" : rarity == "epic" ? "oklch(0.2976 0.1652 303.34)" : rarity == "anomaly" ? "oklch(0.6269 0.2173 41.29)" : rarity == "mythic" ? "oklch(0.2976 0.1375 24.25)" : "oklch(0.7478 0.1869 224.81)"}">
+              <p><span class="num ${rarity}" onclick="window.location.href = 'https://prototypestudios.neocities.org/rngdle?n=${r[0]}';">${r[0]}</span><span class="medium" style="font-size: 1.1em;">${r[1]} EP [${rarity}] • ${r[2]} badges • ${r[3]} • ${r[4]} heart${r[4] == 1 ? "" : "s"}</span></p>
               <p class="small">${r[5] ?? "No poem"}</p>
             </div>
             `);
