@@ -419,6 +419,17 @@
         margin-bottom: 1em;
         background-color: #202224;
       }
+      .expl {
+        background-color: #303336;
+        border-radius: 1em;
+        padding: 1em;
+        height: 2em;
+        overflow: hidden;
+        transition: height 0.5s ease-in-out;
+      }
+      .expl:hover {
+        height: fit-content;
+      }
     </style>
   </head>
   <body>
@@ -477,9 +488,9 @@
       <p class="medium">Longest without Mythic: <span id="withoutmythic">0 in a row (1 in 1.00)</span></p>
       <p class="medium">Longest without Unheard: <span id="withoutunheard">0 in a row (1 in 1.00)</span></p>
       <p class="medium">Total luck: <span id="totalluck">0,0000</span> r-score(s)</p>
-      <div style="background-color: #303336; border-radius: 1em;">
+      <div class="expl">
         <p class="medium">What does this mean?</p>
-        <p class="small" style="width: 50%;">R-scores is the way to measure your account's luck over all its aspects like average roll EP, median roll EP, best roll EP, worst roll EP, and longest streak with/without all the rarities. The lower it is, the unluckier you are, and the higher it is, the luckier you are. 0 r-scores means EVERYTHING is on par with the expected values, and it is meant to emulate z-scores, so values can be negative. That said, here are some rough thresholds:</p>
+        <p class="small" style="width: 95%;">R-scores is the way to measure your account's luck over all its aspects like average roll EP, median roll EP, best roll EP, worst roll EP, and longest streak with/without all the rarities. The lower it is, the unluckier you are, and the higher it is, the luckier you are. 0 r-scores means EVERYTHING is on par with the expected values, and it is meant to emulate z-scores, so values can be negative. That said, here are some rough thresholds:</p>
         <ul style="list-style-type: none;">
           <li class="small">less than -5 r-scores: astronomically unlucky</li>
           <li class="small">-5.0000 to -4.0000 r-scores: extremely unlucky</li>
