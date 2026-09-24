@@ -687,7 +687,7 @@
           document.querySelector("#withoutanomaly").textContent = `${withoutAnomaly.toLocaleString()} in a row (1 in ${(1/0.96**withoutAnomaly).toFixed(2).toLocaleString()})`;
           document.querySelector("#withoutmythic").textContent = `${withoutMythic.toLocaleString()} in a row (1 in ${(1/0.991**withoutMythic).toFixed(2).toLocaleString()})`;
           document.querySelector("#withoutunheard").textContent = `${withoutUnheard.toLocaleString()} in a row (1 in ${(1/0.999**withoutUnheard).toFixed(2).toLocaleString()})`;
-          let totalluck = Math.cbrt((avgluck+medluck+bestluck+worstluck+longestTrash*6+longestCommon+longestUncommon*2+longestRare*3+longestEpic*4+longestAnomaly*5+longestMythic*7+longestUnheard*8-withoutTrash*0.01+withoutCommon*0.49-withoutUncommon*0.25-withoutRare*0.15-withoutEpic*0.05-withoutAnomaly*0.04-withoutMythic*0.009-withoutUnheard*0.001)/100);
+          let totalluck = Math.cbrt((avgluck+medluck+bestluck+worstluck+longestTrash*6-longestCommon+longestUncommon*2+longestRare*3+longestEpic*4+longestAnomaly*5+longestMythic*7+longestUnheard*8-withoutTrash*0.01+withoutCommon*0.49-withoutUncommon*0.25-withoutRare*0.15-withoutEpic*0.05-withoutAnomaly*0.04-withoutMythic*0.009-withoutUnheard*0.001)/100);
           document.querySelector("#totalluck").textContent = totalluck.toFixed(4).toLocaleString();
           document.querySelector("#firstroll").textContent = new Date(json.rolls[rolls.length - 1].rolledAt).toLocaleDateString();
           document.querySelector("#currentstreak").textContent = current.toLocaleString();
