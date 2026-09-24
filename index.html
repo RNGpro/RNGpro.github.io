@@ -575,7 +575,7 @@
         	let current = 0;
         	let longest = 0;
         	for (const d of dates) {
-        		if (rs.some(rr => new Date(rr.rolledAt).toISOString().slice(0, 10) == d && getRarity(rr.totalScore) == r);) current = 0;
+        		if (rs.some(rr => new Date(rr.rolledAt).toISOString().slice(0, 10) == d && getRarity(rr.totalScore) == r)) current = 0;
         		else {current += 1; longest = Math.max(longest, current);}
         	}
         	without[r] = longest;
