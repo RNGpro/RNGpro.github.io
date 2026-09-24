@@ -659,8 +659,8 @@
           sharetext += `🔥 ${current} Day Streak${stars}\n`;
           sharetext += `👑 ${longest} Max Day Streak\n`;
           sharetext += `📈 ${rolls.reduce((a, c) => a + c, 0).toLocaleString()} Total EP\n`;
-          sharetext += `💎 Best Roll: ${document.querySelector("#bestroll").textContent} (${bestep.toLocaleString()}) EP on ${bestdate}\n`;
-          sharetext += `🗑️ Worst Roll: ${document.querySelector("#worstroll").textContent} (${worstep.toLocaleString()}) EP on ${worstdate}`;
+          sharetext += `💎 Best Roll: ${document.querySelector("#bestroll").textContent} (${bestep.toLocaleString()} EP) on ${bestdate}\n`;
+          sharetext += `🗑️ Worst Roll: ${document.querySelector("#worstroll").textContent} (${worstep.toLocaleString()} EP) on ${worstdate}`;
           document.querySelector("#copy").onclick = () => {navigator.clipboard.writeText(sharetext); document.querySelector("#copy").textContent = "✅ Copied! :3"; setTimeout(() => {document.querySelector("#copy").textContent = "Copy roll stats"}, 1500);}
           let avgluck = Number((100*(meanep - 21545)/21545).toFixed(4));
           document.querySelector("#avgluck").textContent = avgluck.toLocaleString();
