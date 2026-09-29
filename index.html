@@ -453,10 +453,10 @@
       <h2 class="large">Overall</h2>
       <p class="medium">Total rolls: <span id="totalrolls">0</span> rolls</p>
       <p class="medium">Total EP: <span id="totalep">0</span> EP</p>
-      <p class="medium">Best roll: <b><span id="bestroll">??????</span></b>, <span id="bestep">0</span> EP (Top <span id="bestperce">0.00</span>%) on <span id="bestdate">21.5.2026</span> - Expected: <span id="expectedbest">0</span> EP</p>
-      <p class="medium"> ┕ Better than <span id="betterthan">0.00</span>% of players</p>
-      <p class="medium">Worst roll: <b><span id="worstroll">??????</span></b>, <span id="worstep">0</span> EP (Bottom <span id="worstperce">0.00</span>%) on <span id="worstdate">21.5.2026</span> - Expected: <span id="expectedworst">0</span> EP</p>
-      <p class="medium"> ┕ Better than <span id="betterthan2">0.00</span>% of players</p>
+      <p class="medium">Best roll: <b><span id="bestroll">??????</span></b>, <span id="bestep">0</span> EP (Top <span id="bestperce">0.000</span>%) on <span id="bestdate">21.5.2026</span> - Expected: <span id="expectedbest">0</span> EP</p>
+      <p class="medium"> ┕ Better than <span id="betterthan">0.000</span>% of players</p>
+      <p class="medium">Worst roll: <b><span id="worstroll">??????</span></b>, <span id="worstep">0</span> EP (Bottom <span id="worstperce">0.000</span>%) on <span id="worstdate">21.5.2026</span> - Expected: <span id="expectedworst">0</span> EP</p>
+      <p class="medium"> ┕ Better than <span id="betterthan2">0.000</span>% of players</p>
       <br>
       <p class="medium">Average EP: <span id="meanep">0</span> EP - Expected: 21 545 EP</p>
       <p class="medium">Median EP: <span id="medianep">0</span> EP - Expected: 5 801 EP</p>
@@ -631,8 +631,8 @@
           document.querySelector("#worstroll").textContent = [...json.rolls].sort((a, b) => a.totalScore - b.totalScore)[0].number;
           let worstdate = new Date([...json.rolls].sort((a, b) => a.totalScore - b.totalScore)[0].rolledAt).toLocaleDateString();
           document.querySelector("#worstep").textContent = worstep.toLocaleString();
-          let worstperce = 1-percentile(worstep)/100;
-          document.querySelector("#worstperce").textContent = (worstperce*100).toFixed(3).toLocaleString();
+          let worstperce = percentile(worstep)/100;
+          document.querySelector("#worstperce").textContent = (100-worstperce*100).toFixed(3).toLocaleString();
           document.querySelector("#worstdate").textContent = worstdate;
           document.querySelector("#betterthan2").textContent = parseFloat(((worstperce - 1) / (worstperce - worstperce * rolls.length - 1)).toFixed(3)).toLocaleString();
           let expectedworst = Math.round(expected(50-50*(rolls.length-1)/rolls.length));
