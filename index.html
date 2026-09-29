@@ -624,7 +624,7 @@
           let bestperce = percentile(bestep)/100;
           document.querySelector("#bestperce").textContent = (bestperce*100).toFixed(3).toLocaleString();
           document.querySelector("#bestdate").textContent = bestdate;
-          document.querySelector("#betterthan").textContent = parseFloat((bestperce / (rolls.length + bestperce - rolls.length * bestperce)).toFixed(3)).toLocaleString();
+          document.querySelector("#betterthan").textContent = parseFloat((bestperce / (rolls.length + bestperce - rolls.length * bestperce) * 100).toFixed(3)).toLocaleString();
           let expectedbest = Math.round(expected(50+50*(rolls.length-1)/rolls.length));
           document.querySelector("#expectedbest").textContent = expectedbest.toLocaleString();
           let worstep = Math.min(...rolls);
@@ -634,7 +634,7 @@
           let worstperce = percentile(worstep)/100;
           document.querySelector("#worstperce").textContent = (100-worstperce*100).toFixed(3).toLocaleString();
           document.querySelector("#worstdate").textContent = worstdate;
-          document.querySelector("#betterthan2").textContent = parseFloat(((worstperce - 1) / (worstperce - worstperce * rolls.length - 1)).toFixed(3)).toLocaleString();
+          document.querySelector("#betterthan2").textContent = parseFloat(((worstperce - 1) / (worstperce - worstperce * rolls.length - 1) * 100).toFixed(3)).toLocaleString();
           let expectedworst = Math.round(expected(50-50*(rolls.length-1)/rolls.length));
           document.querySelector("#expectedworst").textContent = expectedworst.toLocaleString();
           let meanep = Math.round(rolls.reduce((a, c) => a + c/rolls.length, 0));
