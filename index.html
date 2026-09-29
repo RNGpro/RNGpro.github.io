@@ -676,8 +676,9 @@
           document.querySelector("#medianep").textContent = medianep.toLocaleString();
           let averageperce = rolls.map(ep => percentile(ep)).reduce((a, c) => a + c/rolls.length, 0);
           let drift = parseFloat(zscores(averageperce).toFixed(3)).toLocaleString();
+          averageperce = parseFloat(averageperce.toFixed(3)).toLocaleString();
           let ordinal = averageperce.at(-2) == "1" ? "th" : averageperce.at(-1) == "1" ? "st" : averageperce.at(-1) == "2" ? "nd" : averageperce.at(-1) == "3" ? "rd" : "th";
-          document.querySelector("#averageperce").textContent = `${parseFloat(averageperce.toFixed(3)).toLocaleString()}${ordinal}`;
+          document.querySelector("#averageperce").textContent = `${averageperce}${ordinal}`;
           document.querySelector("#overalldrift").textContent = `${drift >= 0 ? "+" : ""}${drift}`;
           let tiers = rolls.map(ep => ep < 2087 ? "trash" : ep < 5802 ? "common" : ep < 10074 ? "uncommon" : ep < 22293 ? "rare" : ep < 35469 ? "epic" : ep < 162292 ? "anomaly" : ep < 1054023 ? "mythic" : "unheard");
           document.querySelector("#unheards").textContent = tiers.filter(tier => tier == "unheard").length.toLocaleString();
