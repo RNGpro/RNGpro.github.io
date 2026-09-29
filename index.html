@@ -460,6 +460,8 @@
       <br>
       <p class="medium">Average EP: <span id="meanep">0</span> EP - Expected: 21 545 EP</p>
       <p class="medium">Median EP: <span id="medianep">0</span> EP - Expected: 5 801 EP</p>
+      <p class="medium">Average percentile: <span id="averageperce">0.00th</span> percentile</p>
+      <p class="medium">Overall drift: <span id="overalldrift">+0.000</span> σ</p>
       <h2 class="large">Rolls</h2>
       <p class="medium">💠 Unheard (Top 0.1%): <span id="unheards">0</span> unheards - Expected: <span id="expectedunheards">0</span> unheards 💠</p>
       <p class="medium">🟥 Mythic (Top 1%): <span id="mythics">0</span> mythics - Expected: <span id="expectedmythics">0</span> mythics 🟥</p>
@@ -605,6 +607,37 @@
       		withoutUnheard: without.unheard
       	};
       }
+      function zscores(percentile) {
+        const p = percentile / 100;
+        if (p <= 0) return -Infinity;
+        if (p >= 1) return Infinity;
+        const a0 = 2.50662823884;
+        const a1 = -18.61500062529;
+        const a2 = 41.39119773534;
+        const a3 = -25.44106049037;
+        const b1 = -8.47351093090;
+        const b2 = 23.08336743743;
+        const b3 = -21.06224101826;
+        const b4 = 3.13082909833;
+        const c0 = 0.3374754822726147;
+        const c1 = 0.9761690132232694;
+        const c2 = 0.1607979714918209;
+        const c3 = 0.0276438810333863;
+        const c4 = 0.0038405729373609;
+        const c5 = 0.0003951896511919;
+        const c6 = 0.0000321767881768;
+        const c7 = 0.0000002888167364;
+        const c8 = 0.0000003960315187;
+        const x = p - 0.5;
+        let z;
+        if (Math.abs(x) < 0.42) {const r = x * x; z = x * (((a3 * r + a2) * r + a1) * r + a0) / ((((b4 * r + b3) * r + b2) * r + b1) * r + 1);
+        } else {
+            let r = p; if (x > 0) r = 1 - p; if (r <= 0) return x > 0 ? Infinity : -Infinity;
+            const s = Math.log(-Math.log(r)); z = c0 + s * (c1 + s * (c2 + s * (c3 + s * (c4 + s * (c5 + s * (c6 + s * (c7 + s * c8)))))));
+            if (x < 0) z = -z;
+        }
+        return z;
+    }
       let rolls = [];
       document.querySelector("#check").onclick = async () => {
         document.querySelector("#loading").textContent = "Loading...";
@@ -622,7 +655,7 @@
           let bestdate = new Date([...json.rolls].sort((a, b) => b.totalScore - a.totalScore)[0].rolledAt).toLocaleDateString();
           document.querySelector("#bestep").textContent = bestep.toLocaleString();
           let bestperce = percentile(bestep)/100;
-          document.querySelector("#bestperce").textContent = (bestperce*100).toFixed(3).toLocaleString();
+          document.querySelector("#bestperce").textContent = (100-bestperce*100).toFixed(3).toLocaleString();
           document.querySelector("#bestdate").textContent = bestdate;
           document.querySelector("#betterthan").textContent = parseFloat((bestperce / (rolls.length + bestperce - rolls.length * bestperce) * 100).toFixed(3)).toLocaleString();
           let expectedbest = Math.round(expected(50+50*(rolls.length-1)/rolls.length));
@@ -632,7 +665,7 @@
           let worstdate = new Date([...json.rolls].sort((a, b) => a.totalScore - b.totalScore)[0].rolledAt).toLocaleDateString();
           document.querySelector("#worstep").textContent = worstep.toLocaleString();
           let worstperce = percentile(worstep)/100;
-          document.querySelector("#worstperce").textContent = (100-worstperce*100).toFixed(3).toLocaleString();
+          document.querySelector("#worstperce").textContent = (worstperce*100).toFixed(3).toLocaleString();
           document.querySelector("#worstdate").textContent = worstdate;
           document.querySelector("#betterthan2").textContent = parseFloat(((worstperce - 1) / (worstperce - worstperce * rolls.length - 1) * 100).toFixed(3)).toLocaleString();
           let expectedworst = Math.round(expected(50-50*(rolls.length-1)/rolls.length));
@@ -641,7 +674,12 @@
           document.querySelector("#meanep").textContent = meanep.toLocaleString();
           let medianep = Math.round((s => (s.length % 2 ? s[Math.floor(s.length/2)] : (s[s.length/2-1] + s[s.length/2]) / 2))(rolls.sort((a, b) => a - b)));
           document.querySelector("#medianep").textContent = medianep.toLocaleString();
-          let tiers = rolls.map(ep => ep < 2087 ? "trash" : ep < 5804 ? "common" : ep < 10079 ? "uncommon" : ep < 22469 ? "rare" : ep < 35530 ? "epic" : ep < 165326 ? "anomaly" : ep < 1103043 ? "mythic" : "unheard");
+          let averageperce = rolls.map(ep => percentile(ep)).reduce((a, c) => a + c/rolls.length, 0);
+          let drift = parseFloat(zscores(averageperce).toFixed(3)).toLocaleString();
+          let ordinal = averageperce.at(-2) == "1" ? "th" : averageperce.at(-1) == "1" ? "st" : averageperce.at(-1) == "2" ? "nd" : averageperce.at(-1) == "3" ? "rd" : "th";
+          document.querySelector("#averageperce").textContent = `${parseFloat(averageperce.toFixed(3)).toLocaleString()}${ordinal}`;
+          document.querySelector("#overalldrift").textContent = `${drift >= 0 ? "+" : ""}${drift}`;
+          let tiers = rolls.map(ep => ep < 2087 ? "trash" : ep < 5802 ? "common" : ep < 10074 ? "uncommon" : ep < 22293 ? "rare" : ep < 35469 ? "epic" : ep < 162292 ? "anomaly" : ep < 1054023 ? "mythic" : "unheard");
           document.querySelector("#unheards").textContent = tiers.filter(tier => tier == "unheard").length.toLocaleString();
           document.querySelector("#expectedunheards").textContent = Math.round(rolls.length / 1000).toLocaleString();
           document.querySelector("#mythics").textContent = tiers.filter(tier => tier == "mythic").length.toLocaleString();
