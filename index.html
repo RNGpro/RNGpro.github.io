@@ -453,8 +453,10 @@
       <h2 class="large">Overall</h2>
       <p class="medium">Total rolls: <span id="totalrolls">0</span> rolls</p>
       <p class="medium">Total EP: <span id="totalep">0</span> EP</p>
-      <p class="medium">Best roll: <b><span id="bestroll">??????</span></b>, <span id="bestep">0</span> EP on <span id="bestdate">21.5.2026</span> - Expected: <span id="expectedbest">0</span> EP</p>
-      <p class="medium">Worst roll: <b><span id="worstroll">??????</span></b>, <span id="worstep">0</span> EP on <span id="worstdate">21.5.2026</span> - Expected: <span id="expectedworst">0</span> EP</p>
+      <p class="medium">Best roll: <b><span id="bestroll">??????</span></b>, <span id="bestep">0</span> EP (Top <span id="bestperce"></span%>) on <span id="bestdate">21.5.2026</span> - Expected: <span id="expectedbest">0</span> EP</p>
+      <p class="medium"> ┕ Better than <span id="betterthan">0.00</span>% of players</p>
+      <p class="medium">Worst roll: <b><span id="worstroll">??????</span></b>, <span id="worstep">0</span> EP (Bottom <span id="worstperce"></span>%) on <span id="worstdate">21.5.2026</span> - Expected: <span id="expectedworst">0</span> EP</p>
+      <p class="medium"> ┕ Better than <span id="betterthan2">0.00</span>% of players</p>
       <br>
       <p class="medium">Average EP: <span id="meanep">0</span> EP - Expected: 21 545 EP</p>
       <p class="medium">Median EP: <span id="medianep">0</span> EP - Expected: 5 801 EP</p>
@@ -609,22 +611,30 @@
         const response = await fetch(`https://rngdle-sandbox.scratchy271.workers.dev/${document.querySelector("#username").value}`);
         const json = await response.json();
         if (!json.error) {
-          let expected = r => Math.min(2380.95292 * (1 / ((-0.01 * r + 1) ** 2.15584724044) - 1) ** 0.430372238202 + 1759, 186186584);
+          let expected = r => Math.min(2392.94619333849 * ((1 / (1 - r / 100)) ** 2.14135302903 - 1) ** 0.430025201428 + 1759, 186186584);
+          let percentile = r => 100 * (1 - (1 + ((r - 1759) / 2392.94619333849) ** 2.32544510572682) ** -0.466994459318441);
           rolls = json.rolls.map(r => r.totalScore);
           document.querySelector("#totalrolls").textContent = rolls.length.toLocaleString();
-          document.querySelector("#totalep").textContent = rolls.reduce((a, c) => a + c, 0).toLocaleString();
+          let totalep = rolls.reduce((a, c) => a + c, 0);
+          document.querySelector("#totalep").textContent = totalep.toLocaleString();
           let bestep = Math.max(...rolls);
           document.querySelector("#bestroll").textContent = [...json.rolls].sort((a, b) => b.totalScore - a.totalScore)[0].number;
           let bestdate = new Date([...json.rolls].sort((a, b) => b.totalScore - a.totalScore)[0].rolledAt).toLocaleDateString();
           document.querySelector("#bestep").textContent = bestep.toLocaleString();
+          let bestperce = percentile(bestep);
+          document.querySelector("#bestperce").textContent = bestperce.toFixed(3).toLocaleString();
           document.querySelector("#bestdate").textContent = bestdate;
+          document.querySelector("#betterthan").textContent = parseFloat((bestperce / (rolls.length + bestperce - rolls.length * bestperce)).toFixed(3)).toLocaleString();
           let expectedbest = Math.round(expected(50+50*(rolls.length-1)/rolls.length));
           document.querySelector("#expectedbest").textContent = expectedbest.toLocaleString();
           let worstep = Math.min(...rolls);
           document.querySelector("#worstroll").textContent = [...json.rolls].sort((a, b) => a.totalScore - b.totalScore)[0].number;
           let worstdate = new Date([...json.rolls].sort((a, b) => a.totalScore - b.totalScore)[0].rolledAt).toLocaleDateString();
           document.querySelector("#worstep").textContent = worstep.toLocaleString();
+          let worstperce = 1-percentile(worstep);
+          document.querySelector("#worstperce").textContent = worstperce.toFixed(3).toLocaleString();
           document.querySelector("#worstdate").textContent = worstdate;
+          document.querySelector("#betterthan2").textContent = parseFloat(((worstperce - 1) / (worstperce - worstperce * rolls.length - 1)).toFixed(3)).toLocaleString();
           let expectedworst = Math.round(expected(50-50*(rolls.length-1)/rolls.length));
           document.querySelector("#expectedworst").textContent = expectedworst.toLocaleString();
           let meanep = Math.round(rolls.reduce((a, c) => a + c/rolls.length, 0));
@@ -662,10 +672,10 @@
           sharetext += `🧮 ${rolls.length.toLocaleString()} Total Rolls\n`;
           sharetext += `🔥 ${current} Day Streak${stars}\n`;
           sharetext += `👑 ${longest} Max Day Streak\n`;
-          sharetext += `📈 ${rolls.reduce((a, c) => a + c, 0).toLocaleString()} Total EP\n`;
+          sharetext += `📈 ${totalep.toLocaleString()} Total EP\n`;
           sharetext += `💎 Best Roll: ${document.querySelector("#bestroll").textContent} (${bestep.toLocaleString()} EP) on ${bestdate}\n`;
           sharetext += `🗑️ Worst Roll: ${document.querySelector("#worstroll").textContent} (${worstep.toLocaleString()} EP) on ${worstdate}`;
-          document.querySelector("#copy").onclick = () => {navigator.clipboard.writeText(sharetext); document.querySelector("#copy").textContent = "✅ Copied! :3"; setTimeout(() => {document.querySelector("#copy").textContent = "Copy roll stats"}, 1500);}
+          document.querySelector("#copy").onclick = () => {navigator.clipboard.writeText(sharetext); document.querySelector("#copy").textContent = "✅ Copied! :3"; setTimeout(() => {document.querySelector("#copy").textContent = "^ Copy these roll stats ^"}, 1500);}
           let avgluck = Number((100*(meanep - 21545)/21545).toFixed(4));
           document.querySelector("#avgluck").textContent = avgluck.toLocaleString();
           let medluck = Number((100*(medianep - 5801)/5801).toFixed(4));
@@ -675,24 +685,24 @@
           let worstluck = Number((-100*(worstep - expectedworst)/expectedworst).toFixed(4));
           document.querySelector("#worstluck").textContent = worstluck.toLocaleString();
           const {longestTrash, longestCommon, longestUncommon, longestRare, longestEpic, longestAnomaly, longestMythic, longestUnheard, withoutTrash, withoutCommon, withoutUncommon, withoutRare, withoutEpic, withoutAnomaly, withoutMythic, withoutUnheard} = streak3(json.rolls);
-          document.querySelector("#trashstreak").textContent = `${longestTrash.toLocaleString()} in a row (1 in ${(1/0.01**longestTrash).toFixed(2).toLocaleString()})`;
-          document.querySelector("#commonstreak").textContent = `${longestCommon.toLocaleString()} in a row (1 in ${(1/0.49**longestCommon).toFixed(2).toLocaleString()})`;
-          document.querySelector("#uncommonstreak").textContent = `${longestUncommon.toLocaleString()} in a row (1 in ${(1/0.25**longestUncommon).toFixed(2).toLocaleString()})`;
-          document.querySelector("#rarestreak").textContent = `${longestRare.toLocaleString()} in a row (1 in ${(1/0.15**longestRare).toFixed(2).toLocaleString()})`;
-          document.querySelector("#epicstreak").textContent = `${longestEpic.toLocaleString()} in a row (1 in ${(1/0.05**longestEpic).toFixed(2).toLocaleString()})`;
-          document.querySelector("#anomalystreak").textContent = `${longestAnomaly.toLocaleString()} in a row (1 in ${(1/0.04**longestAnomaly).toFixed(2).toLocaleString()})`;
-          document.querySelector("#mythicstreak").textContent = `${longestMythic.toLocaleString()} in a row (1 in ${(1/0.009**longestMythic).toFixed(2).toLocaleString()})`;
-          document.querySelector("#unheardstreak").textContent = `${longestUnheard.toLocaleString()} in a row (1 in ${(1/0.001**longestUnheard).toFixed(2).toLocaleString()})`;
-          document.querySelector("#withouttrash").textContent = `${withoutTrash.toLocaleString()} in a row (1 in ${(1/0.99**withoutTrash).toFixed(2).toLocaleString()})`;
-          document.querySelector("#withoutcommon").textContent = `${withoutCommon.toLocaleString()} in a row (1 in ${(1/0.51**withoutCommon).toFixed(2).toLocaleString()})`;
-          document.querySelector("#withoutuncommon").textContent = `${withoutUncommon.toLocaleString()} in a row (1 in ${(1/0.75**withoutUncommon).toFixed(2).toLocaleString()})`;
-          document.querySelector("#withoutrare").textContent = `${withoutRare.toLocaleString()} in a row (1 in ${(1/0.85**withoutRare).toFixed(2).toLocaleString()})`;
-          document.querySelector("#withoutepic").textContent = `${withoutEpic.toLocaleString()} in a row (1 in ${(1/0.95**withoutEpic).toFixed(2).toLocaleString()})`;
-          document.querySelector("#withoutanomaly").textContent = `${withoutAnomaly.toLocaleString()} in a row (1 in ${(1/0.96**withoutAnomaly).toFixed(2).toLocaleString()})`;
-          document.querySelector("#withoutmythic").textContent = `${withoutMythic.toLocaleString()} in a row (1 in ${(1/0.991**withoutMythic).toFixed(2).toLocaleString()})`;
-          document.querySelector("#withoutunheard").textContent = `${withoutUnheard.toLocaleString()} in a row (1 in ${(1/0.999**withoutUnheard).toFixed(2).toLocaleString()})`;
+          document.querySelector("#trashstreak").textContent = `${longestTrash.toLocaleString()} in a row (1 in ${parseFloat((1/0.01**longestTrash).toFixed(2)).toLocaleString()})`;
+          document.querySelector("#commonstreak").textContent = `${longestCommon.toLocaleString()} in a row (1 in ${parseFloat((1/0.49**longestCommon).toFixed(2)).toLocaleString()})`;
+          document.querySelector("#uncommonstreak").textContent = `${longestUncommon.toLocaleString()} in a row (1 in ${parseFloat((1/0.25**longestUncommon).toFixed(2)).toLocaleString()})`;
+          document.querySelector("#rarestreak").textContent = `${longestRare.toLocaleString()} in a row (1 in ${parseFloat((1/0.15**longestRare).toFixed(2)).toLocaleString()})`;
+          document.querySelector("#epicstreak").textContent = `${longestEpic.toLocaleString()} in a row (1 in ${parseFloat((1/0.05**longestEpic).toFixed(2)).toLocaleString()})`;
+          document.querySelector("#anomalystreak").textContent = `${longestAnomaly.toLocaleString()} in a row (1 in ${parseFloat((1/0.04**longestAnomaly).toFixed(2)).toLocaleString()})`;
+          document.querySelector("#mythicstreak").textContent = `${longestMythic.toLocaleString()} in a row (1 in ${parseFloat((1/0.009**longestMythic).toFixed(2)).toLocaleString()})`;
+          document.querySelector("#unheardstreak").textContent = `${longestUnheard.toLocaleString()} in a row (1 in ${parseFloat((1/0.001**longestUnheard).toFixed(2)).toLocaleString()})`;
+          document.querySelector("#withouttrash").textContent = `${withoutTrash.toLocaleString()} in a row (1 in ${parseFloat((1/0.99**withoutTrash).toFixed(2)).toLocaleString()})`;
+          document.querySelector("#withoutcommon").textContent = `${withoutCommon.toLocaleString()} in a row (1 in ${parseFloat((1/0.51**withoutCommon).toFixed(2)).toLocaleString()})`;
+          document.querySelector("#withoutuncommon").textContent = `${withoutUncommon.toLocaleString()} in a row (1 in ${parseFloat((1/0.75**withoutUncommon).toFixed(2)).toLocaleString()})`;
+          document.querySelector("#withoutrare").textContent = `${withoutRare.toLocaleString()} in a row (1 in ${parseFloat((1/0.85**withoutRare).toFixed(2)).toLocaleString()})`;
+          document.querySelector("#withoutepic").textContent = `${withoutEpic.toLocaleString()} in a row (1 in ${parseFloat((1/0.95**withoutEpic).toFixed(2)).toLocaleString()})`;
+          document.querySelector("#withoutanomaly").textContent = `${withoutAnomaly.toLocaleString()} in a row (1 in ${parseFloat((1/0.96**withoutAnomaly).toFixed(2)).toLocaleString()})`;
+          document.querySelector("#withoutmythic").textContent = `${withoutMythic.toLocaleString()} in a row (1 in ${parseFloat((1/0.991**withoutMythic).toFixed(2)).toLocaleString()})`;
+          document.querySelector("#withoutunheard").textContent = `${withoutUnheard.toLocaleString()} in a row (1 in ${parseFloat((1/0.999**withoutUnheard).toFixed(2)).toLocaleString()})`;
           let totalluck = Math.cbrt((avgluck+medluck+bestluck+worstluck+longestTrash*6-longestCommon+longestUncommon*2+longestRare*3+longestEpic*4+longestAnomaly*5+longestMythic*7+longestUnheard*8-withoutTrash*0.01+withoutCommon*0.49-withoutUncommon*0.25-withoutRare*0.15-withoutEpic*0.05-withoutAnomaly*0.04-withoutMythic*0.009-withoutUnheard*0.001)/100);
-          document.querySelector("#totalluck").textContent = totalluck.toFixed(4).toLocaleString();
+          document.querySelector("#totalluck").textContent = parseFloat(totalluck.toFixed(4)).toLocaleString();
           document.querySelector("#firstroll").textContent = new Date(json.rolls[rolls.length - 1].rolledAt).toLocaleDateString();
           document.querySelector("#currentstreak").textContent = current.toLocaleString();
           document.querySelector("#longeststreak").textContent = longest.toLocaleString();
