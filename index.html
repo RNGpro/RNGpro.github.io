@@ -33,6 +33,10 @@
         40%, 60% {transform: scale(2); top: 0%; opacity: 1;}
         100% {transform: scale(2); top: 100%; opacity: 0;}
       }
+      body {
+        text-align: left;
+        padding-inline: 3em;
+      }
       .spin {
         display: flex;
         position: fixed;
@@ -421,7 +425,7 @@
       }
       .expl {
         width: 60%;
-        background-color: #303336;
+        background-color: #101214;
         border-radius: 1em;
         padding: 1em;
         height: 2em;
@@ -463,38 +467,38 @@
       <p class="medium">Average percentile: <span id="averageperce">0.00th</span> percentile</p>
       <p class="medium">Overall drift: <span id="overalldrift">+0.000</span> σ</p>
       <h2 class="large">Rolls</h2>
-      <p class="medium">💠 Unheard (Top 0.1%): <span id="unheards">0</span> unheards - Expected: <span id="expectedunheards">0</span> unheards 💠</p>
-      <p class="medium">🟥 Mythic (Top 1%): <span id="mythics">0</span> mythics - Expected: <span id="expectedmythics">0</span> mythics 🟥</p>
-      <p class="medium">🟧 Anomaly (Top 5%): <span id="anomalies">0</span> anomalies - Expected: <span id="expectedanomalies">0</span> anomalies 🟧</p>
-      <p class="medium">🟪 Epic (Top 10%): <span id="epics">0</span> epics - Expected: <span id="expectedepics">0</span> epics 🟪</p>
-      <p class="medium">🟦 Rare (Top 25%): <span id="rares">0</span> rares - Expected: <span id="expectedrares">0</span> rares 🟦</p>
-      <p class="medium">🟩 Uncommon (Top 50%): <span id="uncommons">0</span> uncommons - Expected: <span id="expecteduncommons">0</span> uncommons 🟩</p>
-      <p class="medium">⬜ Common (Top 99%): <span id="commons">0</span> commons - Expected: <span id="expectedcommons">0</span> commons ⬜</p>
-      <p class="medium">🟫 Trash (Bottom 1%): <span id="trashes">0</span> trashes - Expected: <span id="expectedtrashes">0</span> trashes 🟫</p>
-      <button id="copy">^ Copy these roll stats ^</button>
+      <p class="medium">💠 Unheard (Top 0.1%): <span id="unheards">0</span> unheards - Expected: <span id="expectedunheards">0</span> unheards</p>
+      <p class="medium">🟥 Mythic (Top 1%): <span id="mythics">0</span> mythics - Expected: <span id="expectedmythics">0</span> mythics</p>
+      <p class="medium">🟧 Anomaly (Top 5%): <span id="anomalies">0</span> anomalies - Expected: <span id="expectedanomalies">0</span> anomalies</p>
+      <p class="medium">🟪 Epic (Top 10%): <span id="epics">0</span> epics - Expected: <span id="expectedepics">0</span> epics</p>
+      <p class="medium">🟦 Rare (Top 25%): <span id="rares">0</span> rares - Expected: <span id="expectedrares">0</span> rares</p>
+      <p class="medium">🟩 Uncommon (Top 50%): <span id="uncommons">0</span> uncommons - Expected: <span id="expecteduncommons">0</span> uncommons</p>
+      <p class="medium">⬜ Common (Top 99%): <span id="commons">0</span> commons - Expected: <span id="expectedcommons">0</span> commons</p>
+      <p class="medium">🟫 Trash (Bottom 1%): <span id="trashes">0</span> trashes - Expected: <span id="expectedtrashes">0</span> trashes</p>
+      <button id="copy">^ Copy these stats including Unheard ^</button><button id="copy2">^ Copy these stats excluding Unheard ^</button>
       <h2 class="large">Luck</h2>
       <p class="medium">Average Roll luck: <span id="avgluck">0,0000</span>%</p>
       <p class="medium">Median Roll luck: <span id="medluck">0,0000</span>%</p>
       <p class="medium">Best Roll luck: <span id="bestluck">0,0000</span>%</p>
       <p class="medium">Worst Roll luck: <span id="worstluck">0,0000</span>%</p>
       <br>
-      <p class="medium">🟫🔥 Longest Trash streak: <span id="trashstreak">0 in a row (1 in 1.00)</span> 🔥🟫</p>
-      <p class="medium">⬜🔥 Longest Common streak: <span id="commonstreak">0 in a row (1 in 1.00)</span> 🔥⬜</p>
-      <p class="medium">🟩🔥 Longest Uncommon streak: <span id="uncommonstreak">0 in a row (1 in 1.00)</span> 🔥🟩</p>
-      <p class="medium">🟦🔥 Longest Rare streak: <span id="rarestreak">0 in a row (1 in 1.00)</span> 🔥🟦</p>
-      <p class="medium">🟪🔥 Longest Epic streak: <span id="epicstreak">0 in a row (1 in 1.00)</span> 🔥🟪</p>
-      <p class="medium">🟧🔥 Longest Anomaly streak: <span id="anomalystreak">0 in a row (1 in 1.00)</span> 🔥🟧</p>
-      <p class="medium">🟥🔥 Longest Mythic streak: <span id="mythicstreak">0 in a row (1 in 1.00)</span> 🔥🟥</p>
-      <p class="medium">💠🔥 Longest Unheard streak: <span id="unheardstreak">0 in a row (1 in 1.00)</span> 🔥💠</p>
+      <p class="medium">🟫🔥 Longest Trash streak: <span id="trashstreak">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">⬜🔥 Longest Common streak: <span id="commonstreak">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">🟩🔥 Longest Uncommon streak: <span id="uncommonstreak">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">🟦🔥 Longest Rare streak: <span id="rarestreak">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">🟪🔥 Longest Epic streak: <span id="epicstreak">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">🟧🔥 Longest Anomaly streak: <span id="anomalystreak">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">🟥🔥 Longest Mythic streak: <span id="mythicstreak">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">💠🔥 Longest Unheard streak: <span id="unheardstreak">0 in a row (1 in 1.00)</span></p>
       <br>
-      <p class="medium">🟫❌ Longest without Trash: <span id="withouttrash">0 in a row (1 in 1.00)</span> ❌🟫</p>
-      <p class="medium">⬜❌ Longest without Common: <span id="withoutcommon">0 in a row (1 in 1.00)</span> ❌⬜</p>
-      <p class="medium">🟩❌ Longest without Uncommon: <span id="withoutuncommon">0 in a row (1 in 1.00)</span> ❌🟩</p>
-      <p class="medium">🟦❌ Longest without Rare: <span id="withoutrare">0 in a row (1 in 1.00)</span> ❌🟦</p>
-      <p class="medium">🟪❌ Longest without Epic: <span id="withoutepic">0 in a row (1 in 1.00)</span> ❌🟪</p>
-      <p class="medium">🟧❌ Longest without Anomaly: <span id="withoutanomaly">0 in a row (1 in 1.00)</span> ❌🟧</p>
-      <p class="medium">🟥❌ Longest without Mythic: <span id="withoutmythic">0 in a row (1 in 1.00)</span> ❌🟥</p>
-      <p class="medium">💠❌ Longest without Unheard: <span id="withoutunheard">0 in a row (1 in 1.00)</span> ❌💠</p>
+      <p class="medium">🟫❌ Longest without Trash: <span id="withouttrash">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">⬜❌ Longest without Common: <span id="withoutcommon">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">🟩❌ Longest without Uncommon: <span id="withoutuncommon">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">🟦❌ Longest without Rare: <span id="withoutrare">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">🟪❌ Longest without Epic: <span id="withoutepic">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">🟧❌ Longest without Anomaly: <span id="withoutanomaly">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">🟥❌ Longest without Mythic: <span id="withoutmythic">0 in a row (1 in 1.00)</span></p>
+      <p class="medium">💠❌ Longest without Unheard: <span id="withoutunheard">0 in a row (1 in 1.00)</span></p>
       <br>
       <p class="medium">🍀 Total luck: <span id="totalluck">0,0000</span> r-score(s) 🍀</p>
       <div class="expl">
@@ -714,7 +718,21 @@
           sharetext += `📈 ${totalep.toLocaleString()} Total EP\n`;
           sharetext += `💎 Best Roll: ${document.querySelector("#bestroll").textContent} (${bestep.toLocaleString()} EP) on ${bestdate}\n`;
           sharetext += `🗑️ Worst Roll: ${document.querySelector("#worstroll").textContent} (${worstep.toLocaleString()} EP) on ${worstdate}`;
-          document.querySelector("#copy").onclick = () => {navigator.clipboard.writeText(sharetext); document.querySelector("#copy").textContent = "✅ Copied! :3"; setTimeout(() => {document.querySelector("#copy").textContent = "^ Copy these roll stats ^"}, 1500);}
+          let sharetext2 = `🟥 Mythic (Top 1%): ${document.querySelector("#mythics").textContent} - Expected: ${Math.round(rolls.length / 100).toLocaleString()}\n`;
+          sharetext2 += `🟧 Anomaly (Top 5%): ${document.querySelector("#anomalies").textContent} - Expected: ${Math.round(rolls.length / 25).toLocaleString()}\n`;
+          sharetext2 += `🟪 Epic (Top 10%): ${document.querySelector("#epics").textContent} - Expected: ${Math.round(rolls.length / 20).toLocaleString()}\n`;
+          sharetext2 += `🟦 Rare (Top 25%): ${document.querySelector("#rares").textContent} - Expected: ${Math.round(rolls.length / 6.66667).toLocaleString()}\n`;
+          sharetext2 += `🟩 Uncommon (Top 50%): ${document.querySelector("#uncommons").textContent} - Expected: ${Math.round(rolls.length / 4).toLocaleString()}\n`;
+          sharetext2 += `⬜ Common (Top 99%): ${document.querySelector("#commons").textContent} - Expected: ${Math.round(rolls.length / 2.040816).toLocaleString()}\n`;
+          sharetext2 += `🟫 Trash (Bottom 1%): ${document.querySelector("#trashes").textContent} - Expected: ${Math.round(rolls.length / 100).toLocaleString()}\n\n`;
+          sharetext2 += `🧮 ${rolls.length.toLocaleString()} Total Rolls\n`;
+          sharetext2 += `🔥 ${current} Day Streak${stars}\n`;
+          sharetext2 += `👑 ${longest} Max Day Streak\n`;
+          sharetext2 += `📈 ${totalep.toLocaleString()} Total EP\n`;
+          sharetext2 += `💎 Best Roll: ${document.querySelector("#bestroll").textContent} (${bestep.toLocaleString()} EP) on ${bestdate}\n`;
+          sharetext2 += `🗑️ Worst Roll: ${document.querySelector("#worstroll").textContent} (${worstep.toLocaleString()} EP) on ${worstdate}`;
+          document.querySelector("#copy").onclick = () => {navigator.clipboard.writeText(sharetext); document.querySelector("#copy").textContent = "✅ Copied! :3"; setTimeout(() => {document.querySelector("#copy").textContent = "^ Copy these stats including Unheard ^"}, 1500);}
+          document.querySelector("#copy2").onclick = () => {navigator.clipboard.writeText(sharetext2); document.querySelector("#copy2").textContent = "✅ Copied! :3"; setTimeout(() => {document.querySelector("#copy2").textContent = "^ Copy these stats excluding Unheard ^"}, 1500);}
           let avgluck = Number((100*(meanep - 21545)/21545).toFixed(4));
           document.querySelector("#avgluck").textContent = avgluck.toLocaleString();
           let medluck = Number((100*(medianep - 5801)/5801).toFixed(4));
