@@ -453,7 +453,6 @@
       <input type="text" id="username" placeholder="Enter username to check stats"> <button id="check">Check</button>
       <div class="tooltip"></div><hr>
       <h2 id="loading">^ Enter username above ^</h2>
-      <button id="copy2" style="margin: 0;" onclick="navigator.clipboard.writeText(document.querySelector('#loading').textContent)">Copy username</button>
       <h2 class="large">Overall</h2>
       <p class="medium">Total rolls: <span id="totalrolls">0</span> rolls</p>
       <p class="medium">Total EP: <span id="totalep">0</span> EP</p>
@@ -641,9 +640,8 @@
             if (x < 0) z = -z;
         }
         return z;
-    }
-      let rolls = [];
-      document.querySelector("#check").onclick = async () => {
+      }
+      async function load() {
         document.querySelector("#loading").textContent = "Loading...";
         const response = await fetch(`https://rngdle-sandbox.scratchy271.workers.dev/${document.querySelector("#username").value}`);
         const json = await response.json();
@@ -782,6 +780,9 @@
           }
         }
       }
+      let rolls = [];
+      document.querySelector("#username").addEventListener("keydown", (event) => {if (event.key == "Enter") load;});
+      document.querySelector("#check").onclick = load;
       document.querySelector("#personalize").onclick = () => {window.location.href = "https://prototypestudios.neocities.org/personalize";}
     </script>
   </body>
