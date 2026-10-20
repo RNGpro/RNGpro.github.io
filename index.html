@@ -785,7 +785,7 @@
         }
       }
       document.querySelector("#export").onclick = () => {
-        if (!(username) || document.querySelector("#loading").textContent = "Loading...") return;
+        if (!(username) || document.querySelector("#loading").textContent == "Loading...") return;
         const blob = new Blob([csv], { type: "text/plain" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
