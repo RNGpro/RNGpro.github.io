@@ -453,6 +453,7 @@
       <input type="text" id="username" placeholder="Enter username to check stats"> <button id="check">Check</button>
       <div class="tooltip"></div><hr>
       <h2 id="loading">^ Enter username above ^</h2>
+      <button style="margin: 0;" id="export">Export as CSV</button>
       <h2 class="large">Overall</h2>
       <p class="medium">Total rolls: <span id="totalrolls">0</span> rolls</p>
       <p class="medium">Total EP: <span id="totalep">0</span> EP</p>
@@ -643,7 +644,8 @@
       }
       async function load() {
         document.querySelector("#loading").textContent = "Loading...";
-        const response = await fetch(`https://rngdle-sandbox.scratchy271.workers.dev/${document.querySelector("#username").value}`);
+        username = document.querySelector("#username").value;
+        const response = await fetch(`https://rngdle-sandbox.scratchy271.workers.dev/${username}`);
         const json = await response.json();
         if (!json.error) {
           let expected = r => Math.min(2392.94619333849 * ((1 / (1 - r / 100)) ** 2.14135302903 - 1) ** 0.430025201428 + 1759, 186186584);
@@ -765,9 +767,10 @@
           let totalpoems = json.rolls.filter(r => Boolean(r.poem)).length;
           document.querySelector("#totalpoems").textContent = totalpoems.toLocaleString();
           document.querySelector("#poemspercent").textContent = (totalpoems/rolls.length*100).toFixed(4);
-          document.querySelector("#loading").textContent = document.querySelector("#username").value;
+          document.querySelector("#loading").textContent = username;
           rolls = json.rolls.map(r => [r.number, r.totalScore, r.badgeCount, r.rolledAt.slice(0, 10), r.heartCount, r.poem]);
           document.querySelector(".history").innerHTML = "";
+          csv = "user,date,roll,tier,ep,badges,hearts,poem\n";
           for (r of rolls) {
             const ep = r[1] || 0;
             const rarity = ep < 2087 ? "trash" : ep < 5802 ? "common" : ep < 10074 ? "uncommon" : ep < 22293 ? "rare" : ep < 35469 ? "epic" : ep < 162292 ? "anomaly" : ep < 1054023 ? "mythic" : "unheard";
@@ -777,10 +780,25 @@
               <p class="small">${r[5] ?? "No poem"}</p>
             </div>
             `);
+            csv += `${username},${r[3]},${r[0]},${rarity},${r[1]},${r[2]},${r[4]},${r[5] ?? "No poem"}\n`;
           }
         }
       }
+      document.querySelector("#export").onclick = () => {
+        if (!(username) || document.querySelector("#loading").textContent = "Loading...") return;
+        const blob = new Blob([csv], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${username}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }
       let rolls = [];
+      let csv = "";
+      let username = "";
       document.querySelector("#username").addEventListener("keydown", (event) => {if (event.key == "Enter") load();});
       document.querySelector("#check").onclick = load;
       document.querySelector("#personalize").onclick = () => {window.location.href = "https://prototypestudios.neocities.org/personalize";}
